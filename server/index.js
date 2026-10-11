@@ -5,6 +5,7 @@ const OpenAI = require('openai');
 const { createApp } = require('./app');
 const { createTutorService } = require('./tutorService');
 const { readRuntimeConfig } = require('./config/runtimeConfig');
+const { describeError } = require('./safeError');
 
 function buildServerDependencies({ env = process.env, OpenAIClient = OpenAI } = {}) {
   const config = readRuntimeConfig(env);
@@ -43,9 +44,13 @@ if (require.main === module) {
   try {
     startServer();
   } catch (error) {
-    console.error(error.message === 'OPENAI_API_KEY is required.'
-      ? 'Missing OPENAI_API_KEY. Copy .env.example to .env and add your key.'
-      : error.message);
+    if (error.message === 'OPENAI_API_KEY is required.') {
+      console.error('Missing OPENAI_API_KEY. Copy .env.example to .env and add your key.');
+    } else if (error.message === 'API_PORT must be a positive integer.') {
+      console.error(error.message);
+    } else {
+      console.error(`Server failed to start: ${describeError(error)}`);
+    }
     process.exit(1);
   }
 }

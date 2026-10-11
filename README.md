@@ -42,7 +42,7 @@ Edit `.env`:
 ```dotenv
 OPENAI_API_KEY=your_real_api_key_here
 OPENAI_MODEL=gpt-5-mini
-PORT=3001
+API_PORT=3001
 ```
 
 Never commit `.env`.

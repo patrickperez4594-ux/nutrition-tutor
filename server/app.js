@@ -1,4 +1,5 @@
 const express = require('express');
+const { describeError } = require('./safeError');
 
 const VALID_ACTIONS = new Set([null, undefined, 'simplify', 'expand', 'example']);
 
@@ -21,7 +22,7 @@ function createApp({ tutorService }) {
       const result = await tutorService.respond({ messages, personalization, action });
       return res.json(result);
     } catch (error) {
-      console.error('Tutor request failed:', error?.message || error);
+      console.error(`Tutor request failed: ${describeError(error)}`);
       return res.status(502).json({
         error: 'The tutor is temporarily unavailable. Your conversation is still here. Please retry.'
       });
