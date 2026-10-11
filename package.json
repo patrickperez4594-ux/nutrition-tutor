@@ -1,0 +1,55 @@
+{
+  "name": "ai-nutrition-tutor",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "server": "node server/index.js",
+    "dev": "concurrently \"npm start\" \"npm run server\"",
+    "build": "react-scripts build",
+    "test": "react-scripts test --roots src server shared tests",
+    "test:ci": "CI=true react-scripts test --roots src server shared tests --watchAll=false"
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "openai": "^5.12.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "supertest": "^7.0.0",
+    "typescript": "^4.9.5"
+  },
+  "proxy": "http://localhost:3001",
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "testMatch": [
+      "<rootDir>/{src,server,shared,tests}/**/__tests__/**/*.{js,jsx}",
+      "<rootDir>/{src,server,shared,tests}/**/*.{spec,test}.{js,jsx}"
+    ]
+  }
+}
