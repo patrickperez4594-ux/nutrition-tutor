@@ -145,3 +145,20 @@ Kefi V2 is being introduced incrementally so the working V1 experience remains a
 - The existing Nutrition Tutor system prompt remains unchanged during this foundation phase.
 
 See `docs/architecture/kefi-v2-foundation.md` for module ownership and extension rules.
+
+## Kefi shell preview (Plan 02)
+
+The Kefi app shell (Home / Ask / Scan / Learn / Me navigation, progressive onboarding, editable personalization, and Low-Energy Mode) is built but **off by default**. V1 remains the default experience.
+
+To preview it locally, add this line to your `.env` (or prefix the command) and restart `npm run dev`:
+
+```bash
+REACT_APP_KEFI_FLAG_SHELL=true
+```
+
+- Personalization stays in memory unless the user chooses **Remember on this device**; turning that off deletes the stored copy.
+- The Ask tab is the existing V1 tutor (Private Session, Save Progress, Retry, teaching controls) with Kefi branding.
+- Scan, courses, and other later-plan features are clearly labelled as not yet available and route to Ask Kefi instead.
+- The tortoise mark is provisional artwork; replace it in `src/kefi/KefiMark.js`.
+
+See `docs/architecture/kefi-v2-shell.md` for the shell architecture.

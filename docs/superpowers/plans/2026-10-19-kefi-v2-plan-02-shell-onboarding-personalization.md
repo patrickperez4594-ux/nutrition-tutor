@@ -28,52 +28,52 @@
 ## Tasks
 
 ### Task 1: Plan document and progress ledger
-- [ ] Add this plan and the progress ledger.
+- [x] Add this plan and the progress ledger.
 
 ### Task 2: Client feature flags and string catalog
-- [ ] `src/config/featureFlags.js` reads `REACT_APP_KEFI_FLAG_SHELL` (default false).
-- [ ] `src/i18n/en.js` + `src/i18n/index.js` (`t(key, vars)` with interpolation; missing keys return the key).
-- [ ] Tests for both.
+- [x] `src/config/featureFlags.js` reads `REACT_APP_KEFI_FLAG_SHELL` (default false).
+- [x] `src/i18n/en.js` + `src/i18n/index.js` (`t(key, vars)` with interpolation; missing keys return the key).
+- [x] Tests for both.
 
 ### Task 3: Modular profile domain
-- [ ] `src/domain/profile.js`: `createEmptyProfile`, `normalizeProfile`, `updateProfileSection`, option catalogs, restriction kinds (`allergy` hard, `intolerance` context-sensitive, `avoid`, `dislike` preference), `hardConstraints`.
-- [ ] Tests: unknown values rejected, restriction labels preserved, allergies stay hard, locale fields independent.
+- [x] `src/domain/profile.js`: `createEmptyProfile`, `normalizeProfile`, `updateProfileSection`, option catalogs, restriction kinds (`allergy` hard, `intolerance` context-sensitive, `avoid`, `dislike` preference), `hardConstraints`.
+- [x] Tests: unknown values rejected, restriction labels preserved, allergies stay hard, locale fields independent.
 
 ### Task 4: Profile repository with opt-in persistence
-- [ ] `src/repositories/profileRepository.js`: `loadProfile`, `saveProfile` (no-op unless `privacy.rememberOnDevice`), `clearProfile`, `{ ok, error }` results like V1 storage.
-- [ ] Tests: nothing written by default; opt-out deletes stored copy; corrupt storage fails safely.
+- [x] `src/repositories/profileRepository.js`: `loadProfile`, `saveProfile` (no-op unless `privacy.rememberOnDevice`), `clearProfile`, `{ ok, error }` results like V1 storage.
+- [x] Tests: nothing written by default; opt-out deletes stored copy; corrupt storage fails safely.
 
 ### Task 5: Tutor personalization adapter
-- [ ] `src/kefi/tutorPersonalization.js` maps the profile to `{ goal, learningStyle, foodContext, otherContext }`.
-- [ ] Tests: allergies always included; Low-Energy adds short-response guidance; empty profile maps to V1 empty personalization.
+- [x] `src/kefi/tutorPersonalization.js` maps the profile to `{ goal, learningStyle, foodContext, otherContext }`.
+- [x] Tests: allergies always included; Low-Energy adds short-response guidance; empty profile maps to V1 empty personalization.
 
 ### Task 6: Extract saved-conversation state into a shared hook
-- [ ] `src/hooks/useSavedConversations.js`; V1 `App` consumes it with identical behavior.
-- [ ] Existing V1 tests stay green.
+- [x] `src/hooks/useSavedConversations.js`; V1 `App` consumes it with identical behavior.
+- [x] Existing V1 tests stay green.
 
 ### Task 7: Brand, shell, bottom navigation, Home, Scan, Learn
-- [ ] `KefiMark` (provisional athletic tortoise), `BottomNav` (`aria-current`), `HomeScreen` with the §5.2 actions and always-visible ⚡ Plans Changed, honest Scan/Learn screens.
-- [ ] Ask tab reuses V1 `ChatScreen` (Private Session, Save Progress, Retry, teaching controls), with an optional editable starter draft.
-- [ ] Tests: navigation, Plans Changed visible, starters prefill without auto-sending.
+- [x] `KefiMark` (provisional athletic tortoise), `BottomNav` (`aria-current`), `HomeScreen` with the §5.2 actions and always-visible ⚡ Plans Changed, honest Scan/Learn screens.
+- [x] Ask tab reuses V1 `ChatScreen` (Private Session, Save Progress, Retry, teaching controls), with an optional editable starter draft.
+- [x] Tests: navigation, Plans Changed visible, starters prefill without auto-sending.
 
 ### Task 8: Progressive onboarding
-- [ ] Welcome (Get Started / Continue Without Personalization) → intents → teaching style → optional context (all skippable) → remember choice.
-- [ ] Tests: both welcome paths valid; skipping works; no calorie inputs; remember defaults to off.
+- [x] Welcome (Get Started / Continue Without Personalization) → intents → teaching style → optional context (all skippable) → remember choice.
+- [x] Tests: both welcome paths valid; skipping works; no calorie inputs; remember defaults to off.
 
 ### Task 9: Me — editable personalization and privacy
-- [ ] Sections per §5.10 implemented now: Goals, Food Preferences, Restrictions/Allergies/Intolerances, Culture & Cuisine, Cooking & Equipment, Budget, How Kefi Teaches Me, Response Length, Accessibility, Locale/Units/Currency, Privacy & Saved Data. Calorie & Macro Preferences shows its Plan 04 boundary.
-- [ ] Privacy & Saved Data: what is stored on this device, remember toggle, clear personalization, saved conversations.
-- [ ] Tests: edit and save each section type; clear personalization; remember toggle persistence.
+- [x] Sections per §5.10 implemented now: Goals, Food Preferences, Restrictions/Allergies/Intolerances, Culture & Cuisine, Cooking & Equipment, Budget, How Kefi Teaches Me, Response Length, Accessibility, Locale/Units/Currency, Privacy & Saved Data. Calorie & Macro Preferences shows its Plan 04 boundary.
+- [x] Privacy & Saved Data: what is stored on this device, remember toggle, clear personalization, saved conversations.
+- [x] Tests: edit and save each section type; clear personalization; remember toggle persistence.
 
 ### Task 10: Low-Energy Mode and presentation preferences
-- [ ] Global header toggle; reduces Home choices to one best next step + "Show more", hides secondary copy, disables animation.
-- [ ] Text size, reduced motion, theme (system/light/dark) applied as root attributes; dark-mode tokens.
-- [ ] Tests: toggle reachable from every tab; Home density changes; allergies still reach the tutor in Low-Energy Mode.
+- [x] Global header toggle; reduces Home choices to one best next step + "Show more", hides secondary copy, disables animation.
+- [x] Text size, reduced motion, theme (system/light/dark) applied as root attributes; dark-mode tokens.
+- [x] Tests: toggle reachable from every tab; Home density changes; allergies still reach the tutor in Low-Energy Mode.
 
 ### Task 11: Scenarios, documentation, verification gate
-- [ ] `tests/scenarios/plan02-personalization.scenario.test.js` (privacy + constraints end to end).
-- [ ] Update `docs/architecture/kefi-v2-foundation.md` and README for the shell flag.
-- [ ] `npm run test:ci`, `npm run build`, `git diff --check`, secret scan.
+- [x] `tests/scenarios/plan02-personalization.scenario.test.js` (privacy + constraints end to end).
+- [x] Update `docs/architecture/kefi-v2-foundation.md` and README for the shell flag.
+- [x] `npm run test:ci`, `npm run build`, `git diff --check`, secret scan.
 
 ## Out of scope
 
