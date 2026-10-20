@@ -9,7 +9,15 @@ const starters = [
   'I’m overwhelmed — make this simple'
 ];
 
-export default function ChatScreen({ session, onBack, onSave, onSaved, onNewPrivate, activeSavedTitle }) {
+const V1_BRAND = {
+  eyebrow: 'AI Nutrition Tutor',
+  assistantName: 'Nutrition Tutor',
+  thinking: 'Nutrition Tutor is thinking…',
+  backLabel: 'Back to welcome',
+  orb: 'NT'
+};
+
+export default function ChatScreen({ session, onBack, onSave, onSaved, onNewPrivate, activeSavedTitle, brand = V1_BRAND, draft = null }) {
   const {
     messages, isSending, error, latestAssistantId,
     sendMessage, retryLast, transformLatest, startNewPrivateSession
@@ -19,7 +27,7 @@ export default function ChatScreen({ session, onBack, onSave, onSaved, onNewPriv
     <section className="chat-panel">
       <header className="chat-header">
         <div>
-          <p className="eyebrow">AI Nutrition Tutor</p>
+          <p className="eyebrow">{brand.eyebrow}</p>
           <h1>{activeSavedTitle || 'Private Session'}</h1>
         </div>
         <div className="header-actions">
@@ -30,14 +38,14 @@ export default function ChatScreen({ session, onBack, onSave, onSaved, onNewPriv
               onNewPrivate();
             }
           }}>New Private Session</button>
-          <button className="icon-button" aria-label="Back to welcome" onClick={onBack}>×</button>
+          <button className="icon-button" aria-label={brand.backLabel} onClick={onBack}>×</button>
         </div>
       </header>
 
       <div className="messages" aria-live="polite">
         {!messages.length && (
           <div className="empty-chat">
-            <div className="tutor-orb">NT</div>
+            <div className="tutor-orb" aria-hidden="true">{brand.orb}</div>
             <h2>What would you like to learn today?</h2>
             <p className="muted">Ask in your own words, or start with one of these.</p>
             <div className="starter-grid">
@@ -52,9 +60,10 @@ export default function ChatScreen({ session, onBack, onSave, onSaved, onNewPriv
             showResponseControls={message.id === latestAssistantId}
             onTransform={transformLatest}
             disabled={isSending}
+            assistantName={brand.assistantName}
           />
         ))}
-        {isSending && <div className="typing-indicator">Nutrition Tutor is thinking…</div>}
+        {isSending && <div className="typing-indicator">{brand.thinking}</div>}
       </div>
 
       {error && (
@@ -65,7 +74,7 @@ export default function ChatScreen({ session, onBack, onSave, onSaved, onNewPriv
       )}
 
       <div className="chat-bottom">
-        <ChatComposer onSend={sendMessage} disabled={isSending} />
+        <ChatComposer key={draft?.key} onSend={sendMessage} disabled={isSending} initialText={draft?.text} />
         <div className="chat-meta-row">
           <button className="save-button" disabled={!messages.length} onClick={onSave}>💾 Save Progress</button>
           <span>Nothing is saved unless you choose to save it.</span>

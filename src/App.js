@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import WelcomeScreen from './components/WelcomeScreen';
 import PersonalizationForm from './components/PersonalizationForm';
@@ -7,78 +7,22 @@ import SaveProgressDialog from './components/SaveProgressDialog';
 import SavedConversationList from './components/SavedConversationList';
 import ReviewPrompt from './components/ReviewPrompt';
 import useTutorSession from './hooks/useTutorSession';
+import useSavedConversations from './hooks/useSavedConversations';
 import { emptyPersonalization } from './lib/personalization';
-import { deriveConversationTitle } from './lib/conversationTitle';
-import {
-  deleteConversation,
-  extendReview,
-  isReviewDue,
-  keepUntilDeleted,
-  loadSavedConversations,
-  nextReviewAt,
-  renameConversation,
-  saveConversation
-} from './lib/savedConversations';
+import { readClientFeatureFlags } from './config/featureFlags';
+import KefiApp from './kefi/KefiApp';
 
-function makeId() {
-  if (window.crypto?.randomUUID) return window.crypto.randomUUID();
-  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
-}
-
-function App() {
+export function V1App() {
   const [view, setView] = useState('welcome');
   const [personalization, setPersonalization] = useState(emptyPersonalization());
   const session = useTutorSession(personalization);
-  const [saved, setSaved] = useState([]);
-  const [storageError, setStorageError] = useState('');
+  const savedState = useSavedConversations();
+  const { saved, due, activeSaved, storageError, setActiveSavedId } = savedState;
   const [showSave, setShowSave] = useState(false);
-  const [activeSavedId, setActiveSavedId] = useState(null);
-
-  const refreshSaved = () => {
-    const result = loadSavedConversations();
-    if (result.ok) {
-      setSaved(result.conversations);
-      setStorageError('');
-    } else {
-      setStorageError(result.error);
-    }
-    return result;
-  };
-
-  useEffect(() => { refreshSaved(); }, []);
-
-  const dueConversations = useMemo(() => saved.filter((item) => isReviewDue(item)), [saved]);
-  const due = dueConversations[0] || null;
-  const activeSaved = saved.find((item) => item.id === activeSavedId) || null;
-
-  const persistUpdated = (conversation) => {
-    const result = saveConversation(conversation);
-    if (result.ok) setSaved(result.conversations);
-    else setStorageError(result.error);
-  };
 
   const handleSave = (policy) => {
-    const now = new Date();
-    const previous = activeSaved;
-    const conversation = {
-      id: previous?.id || makeId(),
-      title: previous?.title || deriveConversationTitle(session.messages),
-      messages: session.messages,
-      createdAt: previous?.createdAt || now.toISOString(),
-      updatedAt: now.toISOString(),
-      reviewPolicy: policy,
-      reviewAt: nextReviewAt(policy, now)
-    };
-    const result = saveConversation(conversation);
-    if (result.ok) {
-      setSaved(result.conversations);
-      setActiveSavedId(conversation.id);
-      setStorageError('');
-      setShowSave(false);
-    } else {
-      setStorageError(result.error);
-      setShowSave(false);
-    }
+    savedState.save(policy, session.messages);
+    setShowSave(false);
   };
 
   const openSaved = (conversation) => {
@@ -86,20 +30,6 @@ function App() {
     session.replaceMessages(conversation.messages);
     setActiveSavedId(conversation.id);
     setView('chat');
-  };
-
-  const doRename = (id, title) => {
-    const result = renameConversation(id, title);
-    if (result.ok) setSaved(result.conversations);
-    else setStorageError(result.error);
-  };
-
-  const doDelete = (id) => {
-    const result = deleteConversation(id);
-    if (result.ok) {
-      setSaved(result.conversations);
-      if (activeSavedId === id) setActiveSavedId(null);
-    } else setStorageError(result.error);
   };
 
   const enterChat = (prefs = emptyPersonalization()) => {
@@ -143,8 +73,8 @@ function App() {
         <SavedConversationList
           conversations={saved}
           onOpen={openSaved}
-          onRename={doRename}
-          onDelete={doDelete}
+          onRename={savedState.rename}
+          onDelete={savedState.remove}
           onBack={() => setView('welcome')}
         />
       )}
@@ -153,16 +83,18 @@ function App() {
       {due && (
         <ReviewPrompt
           conversation={due}
-          onExtend={() => persistUpdated(extendReview(due))}
-          onKeepUntilDeleted={() => persistUpdated(keepUntilDeleted(due))}
-          onDelete={() => doDelete(due.id)}
-          onDismiss={() => {
-            setSaved((current) => current.map((item) => item.id === due.id ? { ...item, reviewAt: new Date(Date.now() + 60 * 60 * 1000).toISOString() } : item));
-          }}
+          onExtend={savedState.extendDue}
+          onKeepUntilDeleted={savedState.keepDue}
+          onDelete={() => savedState.remove(due.id)}
+          onDismiss={savedState.dismissDue}
         />
       )}
     </main>
   );
+}
+
+function App({ flags = readClientFeatureFlags() }) {
+  return flags.kefiShell ? <KefiApp /> : <V1App />;
 }
 
 export default App;

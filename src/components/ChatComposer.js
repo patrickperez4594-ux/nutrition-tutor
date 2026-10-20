@@ -1,6 +1,6 @@
 import { useState } from 'react';
-export default function ChatComposer({ onSend, disabled }) {
-  const [text, setText] = useState('');
+export default function ChatComposer({ onSend, disabled, initialText = '' }) {
+  const [text, setText] = useState(initialText);
   const submit = () => {
     const clean = text.trim();
     if (!clean || disabled) return;

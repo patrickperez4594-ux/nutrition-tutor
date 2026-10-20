@@ -1,0 +1,259 @@
+/* Kefi shell styles. Everything is scoped to .kefi-app so the V1 experience is visually unchanged.
+   Shared V1 tokens (--green, --ink, ...) are remapped here so reused V1 components adopt the Kefi palette. */
+
+.kefi-app {
+  --k-bg: #fbf7f1;
+  --k-surface: #ffffff;
+  --k-surface-soft: #f3ece2;
+  --k-ink: #2a2420;
+  --k-muted: #6b5f55;
+  --k-primary: #b4532a;
+  --k-primary-strong: #8f3f1d;
+  --k-primary-soft: #f6e1d4;
+  --k-on-primary: #ffffff;
+  --k-accent: #2f6f62;
+  --k-spark: #d99a2b;
+  --k-border: #e6dccf;
+  --k-danger: #a23636;
+  --k-shadow: 0 10px 30px rgba(74, 52, 35, 0.08);
+
+  --bg: var(--k-bg);
+  --surface: var(--k-surface);
+  --surface-soft: var(--k-surface-soft);
+  --ink: var(--k-ink);
+  --muted: var(--k-muted);
+  --green: var(--k-primary);
+  --green-dark: var(--k-primary-strong);
+  --green-light: var(--k-primary-soft);
+  --border: var(--k-border);
+  --danger: var(--k-danger);
+  --shadow: var(--k-shadow);
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--k-bg);
+  color: var(--k-ink);
+}
+
+.kefi-app[data-theme="dark"] {
+  --k-bg: #1c1916;
+  --k-surface: #26221e;
+  --k-surface-soft: #302a25;
+  --k-ink: #f3ece4;
+  --k-muted: #c2b5a8;
+  --k-primary: #e8956a;
+  --k-primary-strong: #f2b08c;
+  --k-primary-soft: #4a3326;
+  --k-on-primary: #1c1916;
+  --k-accent: #7cc4b3;
+  --k-border: #3d362f;
+  --k-danger: #f19a9a;
+  --k-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  .kefi-app[data-theme="system"] {
+    --k-bg: #1c1916;
+    --k-surface: #26221e;
+    --k-surface-soft: #302a25;
+    --k-ink: #f3ece4;
+    --k-muted: #c2b5a8;
+    --k-primary: #e8956a;
+    --k-primary-strong: #f2b08c;
+    --k-primary-soft: #4a3326;
+    --k-on-primary: #1c1916;
+    --k-accent: #7cc4b3;
+    --k-border: #3d362f;
+    --k-danger: #f19a9a;
+    --k-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* Text size scales the root so rem-based V1 components grow too. */
+html[data-kefi-text-size="large"] { font-size: 112.5%; }
+html[data-kefi-text-size="larger"] { font-size: 125%; }
+
+.kefi-app[data-motion="reduce"] *,
+.kefi-app[data-low-energy="true"] * { transition: none !important; animation: none !important; }
+.kefi-app[data-motion="reduce"] button:hover:not(:disabled),
+.kefi-app[data-low-energy="true"] button:hover:not(:disabled) { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .kefi-app * { transition: none !important; animation: none !important; }
+  .kefi-app button:hover:not(:disabled) { transform: none; }
+}
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* Mark */
+.kefi-mark { display: block; flex: none; }
+.kefi-mark-shell { fill: var(--k-primary); }
+.kefi-mark-rim { fill: var(--k-primary-strong); }
+.kefi-mark-pattern { stroke: var(--k-primary-soft); }
+.kefi-mark-skin { fill: var(--k-accent); }
+.kefi-mark-band { fill: var(--k-spark); }
+.kefi-mark-eye { fill: var(--k-ink); }
+.kefi-mark-motion { stroke: var(--k-spark); }
+
+/* Header */
+.kefi-header {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+  padding: .6rem 1rem;
+  background: var(--k-surface);
+  border-bottom: 1px solid var(--k-border);
+}
+.kefi-brand { display: flex; align-items: center; gap: .5rem; }
+.kefi-wordmark { font-weight: 850; font-size: 1.35rem; letter-spacing: -.03em; }
+.kefi-app .low-energy-toggle {
+  display: inline-flex; align-items: center; gap: .5rem;
+  min-height: 44px; padding: .45rem .8rem;
+  background: var(--k-surface-soft); color: var(--k-ink);
+  border: 1px solid var(--k-border); border-radius: 999px; font-size: .88rem;
+}
+.kefi-app .low-energy-toggle[aria-pressed="true"] { background: var(--k-primary-soft); border-color: var(--k-primary); }
+.low-energy-state { font-weight: 850; color: var(--k-primary-strong); }
+
+.kefi-alert {
+  margin: .75rem auto 0; width: min(calc(100% - 2rem), 728px);
+  padding: .75rem 1rem; border-radius: 12px;
+  background: var(--k-surface); color: var(--k-danger); border: 1px solid var(--k-danger);
+}
+
+/* Main column */
+.kefi-main {
+  flex: 1;
+  width: min(100%, 760px);
+  margin: 0 auto;
+  padding: 1.25rem 1rem calc(96px + env(safe-area-inset-bottom, 0px));
+}
+.onboarding-main { padding-bottom: 2rem; }
+.kefi-screen h1 { font-size: clamp(1.6rem, 5vw, 2.3rem); margin-bottom: .75rem; }
+.kefi-screen h1:focus { outline: none; }
+.kefi-screen h1:focus-visible { outline: 3px solid var(--k-primary); outline-offset: 4px; }
+.kefi-app .eyebrow { color: var(--k-primary-strong); }
+.kefi-app .muted, .kefi-app .welcome-copy, .kefi-app .trust-line { color: var(--k-muted); }
+.section-heading { font-size: 1.15rem; margin: 1.75rem 0 .5rem; }
+.plain-list { padding-left: 1.2rem; line-height: 1.8; }
+.small-print { font-size: .85rem; }
+
+/* Buttons inside the shell */
+.kefi-app .primary-button { background: var(--k-primary); color: var(--k-on-primary); box-shadow: none; }
+.kefi-app .primary-button:hover:not(:disabled) { background: var(--k-primary-strong); }
+.kefi-app .secondary-button { background: var(--k-surface); color: var(--k-ink); border: 1px solid var(--k-border); }
+.kefi-app .text-button, .kefi-app .back-link { color: var(--k-primary-strong); }
+.kefi-app .danger-button { background: var(--k-surface); color: var(--k-danger); border: 1px solid var(--k-danger); }
+
+/* Home */
+.home-focus { margin-top: -.25rem; }
+.home-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin: 1rem 0; }
+.home-card, .plans-changed {
+  display: flex; flex-direction: column; align-items: flex-start; gap: .3rem;
+  width: 100%; min-height: 88px; padding: 1rem;
+  text-align: left; color: var(--k-ink);
+  background: var(--k-surface); border: 1px solid var(--k-border); border-radius: 20px;
+  box-shadow: var(--k-shadow);
+}
+.home-card.primary { background: var(--k-primary); color: var(--k-on-primary); border-color: var(--k-primary); }
+.home-card.primary .home-card-hint { color: inherit; opacity: .9; }
+.home-card-label { font-size: 1.05rem; font-weight: 800; }
+.home-card-hint { font-size: .88rem; font-weight: 500; color: var(--k-muted); }
+.plans-changed { margin-top: .25rem; border: 2px solid var(--k-spark); background: var(--k-surface-soft); }
+.kefi-app[data-low-energy="true"] .home-card { min-height: 64px; margin-bottom: .75rem; }
+.show-more { margin-top: .75rem; }
+
+/* Learn */
+.topic-list { display: grid; gap: .6rem; margin: .75rem 0; }
+.topic-button {
+  text-align: left; background: var(--k-surface); color: var(--k-ink);
+  border: 1px solid var(--k-border); min-height: 52px;
+}
+
+/* Forms */
+.kefi-fieldset { border: 0; padding: 0; margin: 1.25rem 0; }
+.kefi-fieldset legend { font-weight: 800; margin-bottom: .6rem; }
+.kefi-field { display: grid; gap: .4rem; margin: 1rem 0; }
+.kefi-field label { font-weight: 750; }
+.kefi-field input, .kefi-field select, .kefi-field textarea {
+  min-height: 48px; padding: .65rem .8rem; border-radius: 12px;
+  border: 1px solid var(--k-border); background: var(--k-surface); color: var(--k-ink); width: 100%;
+}
+.kefi-field input[aria-invalid="true"] { border-color: var(--k-danger); }
+.field-hint { margin: 0; color: var(--k-muted); font-size: .9rem; }
+.field-error { margin: 0; color: var(--k-danger); font-weight: 700; font-size: .9rem; }
+.kefi-app .choice-pill span { background: var(--k-surface); border-color: var(--k-border); color: var(--k-ink); }
+.kefi-app .choice-pill input:checked + span { border-color: var(--k-primary); background: var(--k-primary-soft); color: var(--k-ink); }
+.kefi-app .choice-pill input:checked + span::before { content: "✓ "; font-weight: 900; margin-right: .3rem; }
+.kefi-app .choice-pill input:focus-visible + span { outline: 3px solid var(--k-primary); outline-offset: 2px; }
+.kefi-app textarea { background: var(--k-surface); color: var(--k-ink); border-color: var(--k-border); }
+
+.restriction-list { list-style: none; padding: 0; margin: .5rem 0; display: grid; gap: .5rem; }
+.restriction-item {
+  display: flex; justify-content: space-between; align-items: center; gap: .5rem;
+  padding: .55rem .75rem; border-radius: 12px; border: 1px solid var(--k-border); background: var(--k-surface);
+}
+.restriction-item > span { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+.restriction-kind { font-size: .8rem; font-weight: 700; padding: .15rem .5rem; border-radius: 999px; background: var(--k-surface-soft); }
+.restriction-item.hard { border-color: var(--k-danger); }
+.restriction-item.hard .restriction-kind { color: var(--k-danger); border: 1px solid var(--k-danger); background: transparent; }
+.restriction-add { display: grid; grid-template-columns: 1fr auto auto; gap: .5rem; align-items: end; }
+.restriction-add .kefi-field { margin: 0; }
+
+.toggle-row { display: flex; align-items: center; gap: .75rem; min-height: 48px; font-weight: 750; }
+.toggle-row input { width: 22px; height: 22px; accent-color: var(--k-primary); }
+.save-status { min-height: 1.5em; color: var(--k-accent); font-weight: 700; }
+
+/* Onboarding */
+.onboarding-welcome { text-align: center; padding-top: 6vh; }
+.welcome-mark { margin: 0 auto 1rem; }
+.onboarding-actions, .me-actions { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-top: 1.5rem; }
+.onboarding-actions .primary-button { margin-left: auto; }
+
+/* Me */
+.me-sections { list-style: none; padding: 0; margin: 1rem 0; display: grid; gap: .5rem; }
+.me-section-button {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  min-height: 56px; text-align: left;
+  background: var(--k-surface); color: var(--k-ink); border: 1px solid var(--k-border); border-radius: 14px;
+}
+
+/* Reused V1 chat and saved list inside the shell */
+.kefi-app .chat-panel, .kefi-app .panel {
+  width: 100%; max-width: none; background: var(--k-surface); border-color: var(--k-border); box-shadow: var(--k-shadow);
+}
+.kefi-app .chat-panel { min-height: calc(100vh - 190px); }
+.kefi-app .chat-header, .kefi-app .chat-bottom { background: var(--k-surface); }
+.kefi-app .assistant .message-bubble { background: var(--k-surface-soft); border-color: var(--k-border); }
+.kefi-app .user .message-bubble { background: var(--k-primary-strong); color: var(--k-bg); }
+.kefi-app .tutor-orb { background: none; box-shadow: none; width: auto; height: auto; }
+.kefi-app .starter-grid button, .kefi-app .teaching-controls button { background: var(--k-surface); color: var(--k-ink); border-color: var(--k-border); }
+.kefi-app .saved-card { background: var(--k-surface); }
+.kefi-app .icon-button { background: var(--k-surface-soft); color: var(--k-ink); }
+.kefi-app .modal { background: var(--k-surface); color: var(--k-ink); }
+.kefi-app[data-low-energy="true"] .privacy-notice span + span { display: none; }
+
+/* Bottom navigation */
+.bottom-nav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+  background: var(--k-surface); border-top: 1px solid var(--k-border);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.bottom-nav ul {
+  list-style: none; margin: 0 auto; padding: .25rem .5rem;
+  display: grid; grid-template-columns: repeat(5, 1fr); max-width: 760px;
+}
+.bottom-nav-item {
+  width: 100%; min-height: 60px; padding: .35rem .25rem;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .15rem;
+  background: transparent; color: var(--k-muted); font-size: .78rem; font-weight: 700; border-radius: 12px;
+}
+.bottom-nav-item[aria-current="page"] { color: var(--k-primary-strong); background: var(--k-primary-soft); font-weight: 850; }
+
+@media (max-width: 520px) {
+  .home-grid { grid-template-columns: 1fr; }
+  .restriction-add { grid-template-columns: 1fr; }
+  .low-energy-toggle { font-size: .8rem; }
+}
