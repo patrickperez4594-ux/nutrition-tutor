@@ -307,3 +307,85 @@ describe('Me: editable personalization and privacy', () => {
     expect(screen.queryByLabelText(/age|height|weight/i)).not.toBeInTheDocument();
   });
 });
+
+describe('Me: restrictions survive a refresh', () => {
+  const AVOID = 'Avoid (religious, ethical, or personal)';
+
+  async function openRestrictions() {
+    await userEvent.click(tab('Me'));
+    await userEvent.click(screen.getByRole('button', { name: /^Restrictions \/ Allergies/ }));
+  }
+
+  async function addRestriction(label, kind) {
+    await userEvent.type(screen.getByLabelText('Food or ingredient'), label);
+    await userEvent.selectOptions(screen.getByLabelText('Type'), kind);
+    await userEvent.click(screen.getByRole('button', { name: 'Add' }));
+  }
+
+  // Unmounting and rendering again re-reads localStorage exactly as a browser refresh does.
+  function refresh(unmount) {
+    unmount();
+    return render(<KefiApp />);
+  }
+
+  test('with Remember on, saved restrictions are restored with their kinds intact', async () => {
+    storeProfile({});
+    const { unmount } = render(<KefiApp />);
+    await openRestrictions();
+    await addRestriction('Beef', 'avoid');
+    await addRestriction('peanuts', 'allergy');
+    await addRestriction('lactose', 'intolerance');
+    await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+    expect(screen.getByRole('status')).toHaveTextContent('Saved.');
+
+    const stored = JSON.parse(window.localStorage.getItem(PROFILE_STORAGE_KEY));
+    expect(stored.restrictions.map(({ label, kind }) => ({ label, kind }))).toEqual([
+      { label: 'Beef', kind: 'avoid' },
+      { label: 'peanuts', kind: 'allergy' },
+      { label: 'lactose', kind: 'intolerance' }
+    ]);
+
+    refresh(unmount);
+    await openRestrictions();
+    expect(screen.queryByText('Nothing added.')).not.toBeInTheDocument();
+    expect(screen.getByText('Beef').closest('li')).toHaveTextContent(AVOID);
+    expect(screen.getByText('Beef').closest('li')).not.toHaveTextContent('Allergy');
+    expect(screen.getByText('peanuts').closest('li')).toHaveTextContent('Allergy (must avoid)');
+    expect(screen.getByText('lactose').closest('li')).toHaveTextContent('Intolerance');
+  });
+
+  test('with Remember off, saving says it is session-only and stores nothing', async () => {
+    const { unmount } = render(<KefiApp />);
+    await userEvent.click(screen.getByRole('button', { name: 'Continue Without Personalization' }));
+    await openRestrictions();
+    expect(screen.getByText(/changes last only until you close or reload Kefi/)).toBeInTheDocument();
+    await addRestriction('Beef', 'avoid');
+    await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+    expect(screen.getByRole('status')).toHaveTextContent('Saved for this session.');
+    expect(window.localStorage.getItem(PROFILE_STORAGE_KEY)).toBeNull();
+
+    refresh(unmount);
+    expect(screen.getByRole('button', { name: 'Continue Without Personalization' })).toBeInTheDocument();
+  });
+
+  test('Save and remember on this device opts in explicitly and restores after refresh', async () => {
+    const { unmount } = render(<KefiApp />);
+    await userEvent.click(screen.getByRole('button', { name: 'Continue Without Personalization' }));
+    await openRestrictions();
+    await addRestriction('Beef', 'avoid');
+    await userEvent.click(screen.getByRole('button', { name: 'Save and remember on this device' }));
+    expect(screen.getByRole('status')).toHaveTextContent('Saved.');
+    expect(screen.queryByRole('button', { name: 'Save and remember on this device' })).not.toBeInTheDocument();
+
+    const stored = JSON.parse(window.localStorage.getItem(PROFILE_STORAGE_KEY));
+    expect(stored.privacy.rememberOnDevice).toBe(true);
+    expect(stored.restrictions).toEqual([expect.objectContaining({ label: 'Beef', kind: 'avoid' })]);
+
+    refresh(unmount);
+    await openRestrictions();
+    expect(screen.getByText('Beef').closest('li')).toHaveTextContent(AVOID);
+    await userEvent.click(screen.getByRole('button', { name: /Back to Me/ }));
+    await userEvent.click(screen.getByRole('button', { name: /^Privacy & Saved Data/ }));
+    expect(screen.getByLabelText('Remember my preferences on this device')).toBeChecked();
+  });
+});

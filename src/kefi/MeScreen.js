@@ -147,7 +147,11 @@ function SectionEditor({ section, profile, onSave, onBack }) {
   const [budgetError, setBudgetError] = useState('');
   const [status, setStatus] = useState('');
 
-  const save = () => {
+  const remember = profile.privacy.rememberOnDevice;
+
+  // With Remember off, a save lasts only until reload, so say so and offer an explicit opt-in
+  // instead of silently storing anything on the device.
+  const save = (rememberOnDevice = remember) => {
     let next = draft;
     if (section === 'budget') {
       const parsed = parseAmountToMinor(budgetText);
@@ -158,8 +162,8 @@ function SectionEditor({ section, profile, onSave, onBack }) {
       setBudgetError('');
       next = { ...draft, budget: { ...draft.budget, amountMinor: parsed.value } };
     }
-    onSave(normalizeProfile(applySection(section, profile, next)));
-    setStatus(t('me.saved'));
+    onSave(normalizeProfile({ ...applySection(section, profile, next), privacy: { rememberOnDevice } }));
+    setStatus(t(rememberOnDevice ? 'me.saved' : 'me.savedSession'));
   };
 
   return (
@@ -174,8 +178,10 @@ function SectionEditor({ section, profile, onSave, onBack }) {
         setBudgetText={(value) => { setStatus(''); setBudgetText(value); }}
         budgetError={budgetError}
       />
+      {!remember && <p className="field-hint">{t('me.sessionOnly')}</p>}
       <div className="me-actions">
-        <button type="button" className="primary-button" onClick={save}>{t('me.save')}</button>
+        <button type="button" className="primary-button" onClick={() => save()}>{t('me.save')}</button>
+        {!remember && <button type="button" className="secondary-button" onClick={() => save(true)}>{t('me.saveAndRemember')}</button>}
         <button type="button" className="secondary-button" onClick={onBack}>{t('me.cancel')}</button>
       </div>
       <p role="status" className="save-status">{status}</p>
