@@ -120,6 +120,7 @@ const en = {
   'restriction.heading': 'Allergies, intolerances, and foods to avoid',
   'restriction.labelField': 'Food or ingredient',
   'restriction.kindField': 'Type',
+  'restriction.kindPlaceholder': 'Choose a type',
   'restriction.add': 'Add',
   'restriction.remove': 'Remove {label}',
   'restriction.empty': 'Nothing added.',

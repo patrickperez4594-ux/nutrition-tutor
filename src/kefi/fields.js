@@ -80,15 +80,18 @@ function makeId() {
 // Allergies and must-avoid items are shown with a text badge, never color alone (spec §33.3).
 export function RestrictionEditor({ restrictions, onChange }) {
   const [label, setLabel] = useState('');
-  const [kind, setKind] = useState('allergy');
+  // No default kind: an allergy, an intolerance, and a religious/ethical/personal restriction are
+  // treated differently, so the user always picks one rather than inheriting "allergy".
+  const [kind, setKind] = useState('');
   const labelId = useId();
   const kindId = useId();
 
   const add = () => {
     const clean = label.trim();
-    if (!clean) return;
+    if (!clean || !kind) return;
     onChange([...restrictions, { id: makeId(), label: clean, kind }]);
     setLabel('');
+    setKind('');
   };
 
   return (
@@ -123,11 +126,12 @@ export function RestrictionEditor({ restrictions, onChange }) {
         </div>
         <div className="kefi-field">
           <label htmlFor={kindId}>{t('restriction.kindField')}</label>
-          <select id={kindId} value={kind} onChange={(e) => setKind(e.target.value)}>
+          <select id={kindId} value={kind} onChange={(e) => setKind(e.target.value)} required>
+            <option value="" disabled>{t('restriction.kindPlaceholder')}</option>
             {RESTRICTION_KINDS.map((k) => <option key={k} value={k}>{t(`restriction.kind.${k}`)}</option>)}
           </select>
         </div>
-        <button type="button" className="secondary-button" onClick={add} disabled={!label.trim()}>{t('restriction.add')}</button>
+        <button type="button" className="secondary-button" onClick={add} disabled={!label.trim() || !kind}>{t('restriction.add')}</button>
       </div>
     </fieldset>
   );

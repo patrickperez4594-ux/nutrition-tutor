@@ -69,6 +69,7 @@ describe('onboarding', () => {
 
     expect(screen.queryByLabelText(/age|height|weight/i)).not.toBeInTheDocument();
     await userEvent.type(screen.getByLabelText('Food or ingredient'), 'peanuts');
+    await userEvent.selectOptions(screen.getByLabelText('Type'), 'allergy');
     await userEvent.click(screen.getByRole('button', { name: 'Add' }));
     expect(screen.getByText('peanuts')).toBeInTheDocument();
     expect(screen.getByText('peanuts').closest('li')).toHaveTextContent('Allergy (must avoid)');
@@ -352,6 +353,29 @@ describe('Me: restrictions survive a refresh', () => {
     expect(screen.getByText('Beef').closest('li')).not.toHaveTextContent('Allergy');
     expect(screen.getByText('peanuts').closest('li')).toHaveTextContent('Allergy (must avoid)');
     expect(screen.getByText('lactose').closest('li')).toHaveTextContent('Intolerance');
+  });
+
+  test('the type is a required choice with no allergy default, and resets after each add', async () => {
+    storeProfile({});
+    render(<KefiApp />);
+    await openRestrictions();
+    const type = screen.getByLabelText('Type');
+    const add = screen.getByRole('button', { name: 'Add' });
+    expect(type).toHaveValue('');
+    expect(type).toBeRequired();
+    expect(screen.getByRole('option', { name: 'Choose a type' })).toBeDisabled();
+
+    await userEvent.type(screen.getByLabelText('Food or ingredient'), 'Beef');
+    expect(add).toBeDisabled();
+    await userEvent.type(screen.getByLabelText('Food or ingredient'), '{enter}');
+    expect(screen.getByText('Nothing added.')).toBeInTheDocument();
+
+    await userEvent.selectOptions(type, 'avoid');
+    expect(add).toBeEnabled();
+    await userEvent.click(add);
+    expect(screen.getByText('Beef').closest('li')).toHaveTextContent(AVOID);
+    expect(type).toHaveValue('');
+    expect(add).toBeDisabled();
   });
 
   test('with Remember off, saving says it is session-only and stores nothing', async () => {
