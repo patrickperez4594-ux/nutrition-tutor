@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import KefiMark from './KefiMark';
-import { ChoiceGroup, MultiChoiceGroup, RestrictionEditor, SelectField, TextField } from './fields';
+import {
+  ChoiceGroup,
+  EMPTY_PENDING_RESTRICTION,
+  MultiChoiceGroup,
+  RestrictionEditor,
+  SelectField,
+  TextField,
+  resolvePendingRestriction
+} from './fields';
 import {
   BUDGET_MODES,
   COOKING_SKILLS,
@@ -37,7 +45,7 @@ function Welcome({ onStart, onSkip }) {
   return (
     <section className="kefi-screen onboarding-welcome" aria-labelledby="welcome-title">
       <KefiMark size={96} className="welcome-mark" />
-      <h1 id="welcome-title">{t('welcome.title')}</h1>
+      <h1 id="welcome-title" tabIndex={-1}>{t('welcome.title')}</h1>
       <p className="welcome-copy">{t('welcome.body')}</p>
       <div className="entry-actions">
         <button type="button" className="primary-button" onClick={onStart}>{t('welcome.start')}</button>
@@ -51,12 +59,27 @@ function Welcome({ onStart, onSkip }) {
 export default function Onboarding({ initialProfile, onComplete }) {
   const [stepIndex, setStepIndex] = useState(-1);
   const [draft, setDraft] = useState(() => normalizeProfile(initialProfile));
+  // The half-entered restriction lives here so it survives Back and is resolved on Next.
+  const [pendingRestriction, setPendingRestriction] = useState(EMPTY_PENDING_RESTRICTION);
+  const [restrictionError, setRestrictionError] = useState('');
   const headingRef = useRef(null);
+  const firstRender = useRef(true);
   const step = STEPS[stepIndex];
 
+  // Move focus to each step's heading, including back to Welcome, but not on first load.
   useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
     if (stepIndex >= 0) headingRef.current?.focus();
+    else document.getElementById('welcome-title')?.focus();
   }, [stepIndex]);
+
+  const changePending = (pending) => {
+    setRestrictionError('');
+    setPendingRestriction(pending);
+  };
 
   const set = (domain, value) => setDraft((d) => ({ ...d, [domain]: { ...d[domain], ...value } }));
   const finish = (profile) => onComplete(normalizeProfile({ ...profile, onboarding: { completed: true } }));
@@ -66,6 +89,26 @@ export default function Onboarding({ initialProfile, onComplete }) {
       setDraft(profile);
       setStepIndex((i) => i + 1);
     }
+  };
+
+  // Never drop a typed restriction: add it if complete, otherwise stay and explain.
+  const continueFromStep = () => {
+    if (step !== 'context') {
+      next();
+      return;
+    }
+    const resolved = resolvePendingRestriction(draft.restrictions, pendingRestriction);
+    if (!resolved.ok) {
+      setRestrictionError(t('restriction.pendingNeedsKind', { label: pendingRestriction.label.trim() }));
+      return;
+    }
+    changePending(EMPTY_PENDING_RESTRICTION);
+    next({ ...draft, restrictions: resolved.restrictions });
+  };
+
+  const skip = () => {
+    if (step === 'context') changePending(EMPTY_PENDING_RESTRICTION);
+    next(skipStep(step, draft));
   };
 
   if (stepIndex < 0) {
@@ -112,7 +155,13 @@ export default function Onboarding({ initialProfile, onComplete }) {
 
       {step === 'context' && (
         <>
-          <RestrictionEditor restrictions={draft.restrictions} onChange={(restrictions) => setDraft((d) => ({ ...d, restrictions }))} />
+          <RestrictionEditor
+            restrictions={draft.restrictions}
+            onChange={(restrictions) => setDraft((d) => ({ ...d, restrictions }))}
+            pending={pendingRestriction}
+            onPendingChange={changePending}
+            error={restrictionError}
+          />
           <TextField label={t('food.enjoy')} value={draft.foodPreferences.enjoy} onChange={(enjoy) => set('foodPreferences', { enjoy })} />
           <TextField label={t('cuisine.enjoyed')} hint={t('cuisine.hint')} value={draft.cuisine.enjoyed} onChange={(enjoyed) => set('cuisine', { enjoyed })} />
           <SelectField label={t('cooking.skill')} value={draft.cooking.skill} options={COOKING_SKILLS} onChange={(skill) => set('cooking', { skill })} labelFor={(o) => t(`cooking.skill.${o || 'unset'}`)} />
@@ -134,8 +183,8 @@ export default function Onboarding({ initialProfile, onComplete }) {
 
       <div className="onboarding-actions">
         <button type="button" className="text-button" onClick={() => setStepIndex((i) => i - 1)}>{t('onboarding.back')}</button>
-        {step !== 'remember' && <button type="button" className="secondary-button" onClick={() => next(skipStep(step, draft))}>{t('onboarding.skip')}</button>}
-        <button type="button" className="primary-button" onClick={() => next()}>
+        {step !== 'remember' && <button type="button" className="secondary-button" onClick={skip}>{t('onboarding.skip')}</button>}
+        <button type="button" className="primary-button" onClick={continueFromStep}>
           {step === 'remember' ? t('onboarding.finish') : t('onboarding.next')}
         </button>
       </div>

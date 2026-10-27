@@ -413,3 +413,121 @@ describe('Me: restrictions survive a refresh', () => {
     expect(screen.getByLabelText('Remember my preferences on this device')).toBeChecked();
   });
 });
+
+describe('a typed restriction is never silently discarded', () => {
+  const NEEDS_TYPE = /Choose a type for “sesame”/;
+
+  async function openRestrictions() {
+    await userEvent.click(tab('Me'));
+    await userEvent.click(screen.getByRole('button', { name: /^Restrictions \/ Allergies/ }));
+  }
+
+  async function reachContextStep() {
+    await userEvent.click(screen.getByRole('button', { name: 'Get Started' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Next' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Next' }));
+  }
+
+  test('Me: a complete entry that was not added is added on Save and announced', async () => {
+    storeProfile({});
+    render(<KefiApp />);
+    await openRestrictions();
+    await userEvent.type(screen.getByLabelText('Food or ingredient'), 'sesame');
+    await userEvent.selectOptions(screen.getByLabelText('Type'), 'allergy');
+    await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+
+    expect(screen.getByRole('status')).toHaveTextContent('Added “sesame” to your list. Saved.');
+    expect(screen.getByText('sesame').closest('li')).toHaveTextContent('Allergy (must avoid)');
+    expect(screen.getByLabelText('Food or ingredient')).toHaveValue('');
+    const stored = JSON.parse(window.localStorage.getItem(PROFILE_STORAGE_KEY));
+    expect(stored.restrictions).toEqual([expect.objectContaining({ label: 'sesame', kind: 'allergy' })]);
+  });
+
+  test('Me: an entry without a type blocks Save, explains why, and moves focus to Type', async () => {
+    storeProfile({});
+    render(<KefiApp />);
+    await openRestrictions();
+    await userEvent.type(screen.getByLabelText('Food or ingredient'), 'sesame');
+    await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+
+    expect(screen.getByRole('alert')).toHaveTextContent(NEEDS_TYPE);
+    const type = screen.getByLabelText('Type');
+    expect(type).toHaveFocus();
+    expect(type).toHaveAttribute('aria-invalid', 'true');
+    expect(type).toHaveAccessibleDescription(NEEDS_TYPE);
+    expect(screen.getByRole('status')).toHaveTextContent('');
+    expect(JSON.parse(window.localStorage.getItem(PROFILE_STORAGE_KEY)).restrictions).toEqual([]);
+
+    await userEvent.selectOptions(type, 'intolerance');
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+    expect(JSON.parse(window.localStorage.getItem(PROFILE_STORAGE_KEY)).restrictions)
+      .toEqual([expect.objectContaining({ label: 'sesame', kind: 'intolerance' })]);
+  });
+
+  test('onboarding: a complete entry that was not added is kept on Next and reaches the tutor', async () => {
+    const fetchMock = mockChat();
+    render(<KefiApp />);
+    await reachContextStep();
+    await userEvent.type(screen.getByLabelText('Food or ingredient'), 'sesame');
+    await userEvent.selectOptions(screen.getByLabelText('Type'), 'allergy');
+    await userEvent.click(screen.getByRole('button', { name: 'Next' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Start using Kefi' }));
+
+    await userEvent.click(tab('Ask'));
+    await userEvent.type(screen.getByLabelText('Ask a nutrition question'), 'Snack ideas?{enter}');
+    await screen.findByText('Here is a gentle idea.');
+    expect(lastChatBody(fetchMock).personalization.foodContext).toMatch(/ALLERGIES.*sesame/);
+  });
+
+  test('onboarding: an entry without a type blocks Next and survives Back', async () => {
+    render(<KefiApp />);
+    await reachContextStep();
+    await userEvent.type(screen.getByLabelText('Food or ingredient'), 'sesame');
+    await userEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+    expect(screen.getByText('Step 3 of 4')).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent(NEEDS_TYPE);
+    expect(screen.getByLabelText('Type')).toHaveFocus();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Back' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByLabelText('Food or ingredient')).toHaveValue('sesame');
+  });
+
+  test('the disabled Add button explains what it needs', async () => {
+    storeProfile({});
+    render(<KefiApp />);
+    await openRestrictions();
+    const add = screen.getByRole('button', { name: 'Add' });
+    const hint = 'To add an item, enter the food or ingredient and choose its type.';
+    expect(add).toBeDisabled();
+    expect(add).toHaveAccessibleDescription(hint);
+    expect(screen.getByText(hint)).toBeVisible();
+
+    await userEvent.type(screen.getByLabelText('Food or ingredient'), 'sesame');
+    await userEvent.selectOptions(screen.getByLabelText('Type'), 'dislike');
+    expect(add).toBeEnabled();
+    expect(add).not.toHaveAccessibleDescription();
+    expect(screen.queryByText(hint)).not.toBeInTheDocument();
+  });
+});
+
+describe('keyboard focus follows navigation', () => {
+  test('Ask and Saved Progress move focus to their headings', async () => {
+    storeProfile({});
+    render(<KefiApp />);
+    await userEvent.click(tab('Ask'));
+    expect(screen.getByRole('heading', { level: 1, name: 'Private Session' })).toHaveFocus();
+    await userEvent.click(screen.getByRole('button', { name: 'Saved Progress' }));
+    expect(screen.getByRole('heading', { level: 1, name: 'Your conversations' })).toHaveFocus();
+  });
+
+  test('Back from the first onboarding step returns focus to the welcome heading', async () => {
+    render(<KefiApp />);
+    expect(document.body).toHaveFocus();
+    await userEvent.click(screen.getByRole('button', { name: 'Get Started' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Back' }));
+    expect(screen.getByRole('heading', { level: 1, name: /Hi, I’m Kefi/ })).toHaveFocus();
+  });
+});

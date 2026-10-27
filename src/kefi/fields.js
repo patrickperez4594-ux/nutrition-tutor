@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef } from 'react';
 import { RESTRICTION_KINDS, isRestrictionHard } from '../domain/profile';
 import { t } from '../i18n';
 
@@ -77,21 +77,40 @@ function makeId() {
   return `r-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
+export const EMPTY_PENDING_RESTRICTION = Object.freeze({ label: '', kind: '' });
+
+// Resolves a half-entered restriction before its form is left, so an allergy, intolerance, or
+// avoided food is never silently dropped: a complete entry is added, an entry missing its type
+// blocks (ok: false), and an empty one is ignored.
+export function resolvePendingRestriction(restrictions, pending) {
+  const label = String(pending?.label ?? '').trim();
+  if (!label) return { ok: true, restrictions, added: null };
+  if (!pending.kind) return { ok: false, restrictions, added: null };
+  const added = { id: makeId(), label, kind: pending.kind };
+  return { ok: true, restrictions: [...restrictions, added], added };
+}
+
 // Allergies and must-avoid items are shown with a text badge, never color alone (spec §33.3).
-export function RestrictionEditor({ restrictions, onChange }) {
-  const [label, setLabel] = useState('');
-  // No default kind: an allergy, an intolerance, and a religious/ethical/personal restriction are
-  // treated differently, so the user always picks one rather than inheriting "allergy".
-  const [kind, setKind] = useState('');
+// The half-entered item (`pending`) is owned by the parent so it can be resolved on save or next.
+export function RestrictionEditor({ restrictions, onChange, pending, onPendingChange, error = '' }) {
+  const { label, kind } = pending;
   const labelId = useId();
   const kindId = useId();
+  const addHintId = useId();
+  const errorId = useId();
+  const kindRef = useRef(null);
+  const canAdd = Boolean(label.trim() && kind);
+
+  // The only blocking error is a missing type, so take the user straight to it.
+  useEffect(() => {
+    if (error) kindRef.current?.focus();
+  }, [error]);
 
   const add = () => {
-    const clean = label.trim();
-    if (!clean || !kind) return;
-    onChange([...restrictions, { id: makeId(), label: clean, kind }]);
-    setLabel('');
-    setKind('');
+    const resolved = resolvePendingRestriction(restrictions, pending);
+    if (!resolved.added) return;
+    onChange(resolved.restrictions);
+    onPendingChange(EMPTY_PENDING_RESTRICTION);
   };
 
   return (
@@ -120,19 +139,31 @@ export function RestrictionEditor({ restrictions, onChange }) {
             id={labelId}
             type="text"
             value={label}
-            onChange={(e) => setLabel(e.target.value)}
+            onChange={(e) => onPendingChange({ label: e.target.value, kind })}
             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); add(); } }}
           />
         </div>
         <div className="kefi-field">
           <label htmlFor={kindId}>{t('restriction.kindField')}</label>
-          <select id={kindId} value={kind} onChange={(e) => setKind(e.target.value)} required>
+          {/* No default kind: an allergy, an intolerance, and a religious/ethical/personal restriction
+              are treated differently, so the user always picks one rather than inheriting "allergy". */}
+          <select
+            id={kindId}
+            ref={kindRef}
+            value={kind}
+            onChange={(e) => onPendingChange({ label, kind: e.target.value })}
+            required
+            aria-invalid={error ? true : undefined}
+            aria-describedby={error ? errorId : undefined}
+          >
             <option value="" disabled>{t('restriction.kindPlaceholder')}</option>
             {RESTRICTION_KINDS.map((k) => <option key={k} value={k}>{t(`restriction.kind.${k}`)}</option>)}
           </select>
         </div>
-        <button type="button" className="secondary-button" onClick={add} disabled={!label.trim() || !kind}>{t('restriction.add')}</button>
+        <button type="button" className="secondary-button" onClick={add} disabled={!canAdd} aria-describedby={canAdd ? undefined : addHintId}>{t('restriction.add')}</button>
       </div>
+      {!canAdd && <p id={addHintId} className="field-hint">{t('restriction.addHint')}</p>}
+      {error && <p id={errorId} className="field-error" role="alert">{error}</p>}
     </fieldset>
   );
 }

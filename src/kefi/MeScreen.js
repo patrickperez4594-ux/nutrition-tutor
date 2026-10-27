@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react';
-import { ChoiceGroup, MultiChoiceGroup, RestrictionEditor, SelectField, TextField } from './fields';
+import {
+  ChoiceGroup,
+  EMPTY_PENDING_RESTRICTION,
+  MultiChoiceGroup,
+  RestrictionEditor,
+  SelectField,
+  TextField,
+  resolvePendingRestriction
+} from './fields';
 import {
   BUDGET_MODES,
   BUDGET_PERIODS,
@@ -54,7 +62,7 @@ export function applySection(section, latest, draft) {
   return domains.reduce((acc, domain) => ({ ...acc, [domain]: draft[domain] }), latest);
 }
 
-function SectionFields({ section, draft, setDraft, budgetText, setBudgetText, budgetError }) {
+function SectionFields({ section, draft, setDraft, budgetText, setBudgetText, budgetError, pendingRestriction, setPendingRestriction, restrictionError }) {
   const set = (domain, value) => setDraft((d) => ({ ...d, [domain]: { ...d[domain], ...value } }));
 
   switch (section) {
@@ -74,7 +82,15 @@ function SectionFields({ section, draft, setDraft, budgetText, setBudgetText, bu
         </>
       );
     case 'restrictions':
-      return <RestrictionEditor restrictions={draft.restrictions} onChange={(restrictions) => setDraft((d) => ({ ...d, restrictions }))} />;
+      return (
+        <RestrictionEditor
+          restrictions={draft.restrictions}
+          onChange={(restrictions) => setDraft((d) => ({ ...d, restrictions }))}
+          pending={pendingRestriction}
+          onPendingChange={setPendingRestriction}
+          error={restrictionError}
+        />
+      );
     case 'cuisine':
       return <TextField label={t('cuisine.enjoyed')} hint={t('cuisine.hint')} value={draft.cuisine.enjoyed} onChange={(enjoyed) => set('cuisine', { enjoyed })} multiline />;
     case 'cooking':
@@ -145,6 +161,8 @@ function SectionEditor({ section, profile, onSave, onBack }) {
   const [draft, setDraft] = useState(profile);
   const [budgetText, setBudgetText] = useState(formatMinorAmount(profile.budget.amountMinor));
   const [budgetError, setBudgetError] = useState('');
+  const [pendingRestriction, setPendingRestriction] = useState(EMPTY_PENDING_RESTRICTION);
+  const [restrictionError, setRestrictionError] = useState('');
   const [status, setStatus] = useState('');
 
   const remember = profile.privacy.rememberOnDevice;
@@ -162,8 +180,23 @@ function SectionEditor({ section, profile, onSave, onBack }) {
       setBudgetError('');
       next = { ...draft, budget: { ...draft.budget, amountMinor: parsed.value } };
     }
+    // A typed restriction is never silently dropped: add it if complete, otherwise block and explain.
+    let added = null;
+    if (section === 'restrictions') {
+      const resolved = resolvePendingRestriction(draft.restrictions, pendingRestriction);
+      if (!resolved.ok) {
+        setStatus('');
+        setRestrictionError(t('restriction.pendingNeedsKind', { label: pendingRestriction.label.trim() }));
+        return;
+      }
+      added = resolved.added;
+      next = { ...draft, restrictions: resolved.restrictions };
+      setDraft(next);
+      setPendingRestriction(EMPTY_PENDING_RESTRICTION);
+    }
     onSave(normalizeProfile({ ...applySection(section, profile, next), privacy: { rememberOnDevice } }));
-    setStatus(t(rememberOnDevice ? 'me.saved' : 'me.savedSession'));
+    const saved = t(rememberOnDevice ? 'me.saved' : 'me.savedSession');
+    setStatus(added ? `${t('restriction.autoAdded', { label: added.label })} ${saved}` : saved);
   };
 
   return (
@@ -177,6 +210,9 @@ function SectionEditor({ section, profile, onSave, onBack }) {
         budgetText={budgetText}
         setBudgetText={(value) => { setStatus(''); setBudgetText(value); }}
         budgetError={budgetError}
+        pendingRestriction={pendingRestriction}
+        setPendingRestriction={(value) => { setStatus(''); setRestrictionError(''); setPendingRestriction(value); }}
+        restrictionError={restrictionError}
       />
       {!remember && <p className="field-hint">{t('me.sessionOnly')}</p>}
       <div className="me-actions">

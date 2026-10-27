@@ -132,8 +132,8 @@ html[data-kefi-text-size="larger"] { font-size: 125%; }
 }
 .onboarding-main { padding-bottom: 2rem; }
 .kefi-screen h1 { font-size: clamp(1.6rem, 5vw, 2.3rem); margin-bottom: .75rem; }
-.kefi-screen h1:focus { outline: none; }
-.kefi-screen h1:focus-visible { outline: 3px solid var(--k-primary); outline-offset: 4px; }
+.kefi-app h1:focus { outline: none; }
+.kefi-app h1:focus-visible { outline: 3px solid var(--k-primary); outline-offset: 4px; }
 .kefi-app .eyebrow { color: var(--k-primary-strong); }
 .kefi-app .muted, .kefi-app .welcome-copy, .kefi-app .trust-line { color: var(--k-muted); }
 .section-heading { font-size: 1.15rem; margin: 1.75rem 0 .5rem; }

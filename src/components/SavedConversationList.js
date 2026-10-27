@@ -3,7 +3,7 @@ export default function SavedConversationList({ conversations, onOpen, onRename,
     <section className="panel saved-panel">
       <button className="back-link" onClick={onBack}>← Back</button>
       <p className="eyebrow">Saved Progress</p>
-      <h1>Your conversations</h1>
+      <h1 tabIndex={-1}>Your conversations</h1>
       <p className="muted">Saved only on this device/browser in Version 1.</p>
       {!conversations.length ? (
         <div className="empty-saved">No saved conversations yet.</div>

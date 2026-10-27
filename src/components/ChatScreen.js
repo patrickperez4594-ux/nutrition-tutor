@@ -28,7 +28,7 @@ export default function ChatScreen({ session, onBack, onSave, onSaved, onNewPriv
       <header className="chat-header">
         <div>
           <p className="eyebrow">{brand.eyebrow}</p>
-          <h1>{activeSavedTitle || 'Private Session'}</h1>
+          <h1 tabIndex={-1}>{activeSavedTitle || 'Private Session'}</h1>
         </div>
         <div className="header-actions">
           <button className="text-button" onClick={onSaved}>Saved Progress</button>
