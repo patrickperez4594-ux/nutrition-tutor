@@ -173,20 +173,32 @@ describe('navigation and Home', () => {
   });
 });
 
-describe('Low-Energy Mode', () => {
+describe('Detour Mode (internally lowEnergy)', () => {
   beforeEach(() => storeProfile({ goals: { intents: ['protein'] } }));
 
   test('is reachable from every tab', async () => {
     render(<KefiApp />);
     for (const name of ['Home', 'Ask', 'Scan', 'Learn', 'Me']) {
       await userEvent.click(tab(name));
-      expect(screen.getByRole('button', { name: 'Low-Energy Mode' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Detour Mode' })).toBeInTheDocument();
+    }
+  });
+
+  test('is named Detour Mode, described supportively, and never called Low-Energy', async () => {
+    render(<KefiApp />);
+    const toggle = screen.getByRole('button', { name: 'Detour Mode' });
+    expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    expect(toggle).toHaveAccessibleDescription('Having a difficult day? Kefi can make things simpler. Fewer decisions, shorter explanations, and manageable steps at your own pace.');
+    expect(toggle).toHaveTextContent('Detour ModeOff');
+    for (const name of ['Home', 'Ask', 'Scan', 'Learn', 'Me']) {
+      await userEvent.click(tab(name));
+      expect(document.body).not.toHaveTextContent(/low[- ]energy/i);
     }
   });
 
   test('reduces Home to one next step plus Plans Changed, with the rest one tap away', async () => {
     render(<KefiApp />);
-    const toggle = screen.getByRole('button', { name: 'Low-Energy Mode' });
+    const toggle = screen.getByRole('button', { name: 'Detour Mode' });
     await userEvent.click(toggle);
     expect(toggle).toHaveAttribute('aria-pressed', 'true');
     expect(screen.getByText('One good next step')).toBeInTheDocument();
@@ -205,7 +217,7 @@ describe('Low-Energy Mode', () => {
     storeProfile({ restrictions: [{ id: 'a', label: 'peanuts', kind: 'allergy' }] });
     const fetchMock = mockChat();
     render(<KefiApp />);
-    await userEvent.click(screen.getByRole('button', { name: 'Low-Energy Mode' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Detour Mode' }));
     await userEvent.click(tab('Ask'));
     await userEvent.type(screen.getByLabelText('Ask a nutrition question'), 'Snack idea?{enter}');
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());

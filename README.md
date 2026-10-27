@@ -148,7 +148,7 @@ See `docs/architecture/kefi-v2-foundation.md` for module ownership and extension
 
 ## Kefi shell preview (Plan 02)
 
-The Kefi app shell (Home / Ask / Scan / Learn / Me navigation, progressive onboarding, editable personalization, and Low-Energy Mode) is built but **off by default**. V1 remains the default experience.
+The Kefi app shell (Home / Ask / Scan / Learn / Me navigation, progressive onboarding, editable personalization, and Detour Mode, a simpler presentation for difficult days) is built but **off by default**. V1 remains the default experience.
 
 To preview it locally, add this line to your `.env` (or prefix the command) and restart `npm run dev`:
 

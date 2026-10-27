@@ -46,10 +46,11 @@ test('allergies are always labelled as hard constraints and kept distinct from d
   expect(foodContext).toMatch(/Dislikes \(preference only\): olives/);
 });
 
-test('Low-Energy Mode shortens presentation but never drops constraints', () => {
+test('Detour Mode shortens presentation but never drops constraints', () => {
   const result = toTutorPersonalization({ ...rich, presentation: { lowEnergy: true } });
   expect(result.learningStyle).toMatch(/one clear next step/);
-  expect(result.otherContext).toMatch(/without reducing safety, accuracy, or constraint handling/);
+  expect(result.otherContext).toMatch(/Detour Mode is on.*without reducing safety, accuracy, or constraint handling/);
+  expect(JSON.stringify(result)).not.toMatch(/Low-Energy/i);
   expect(result.foodContext).toMatch(/ALLERGIES .*peanuts/);
 });
 

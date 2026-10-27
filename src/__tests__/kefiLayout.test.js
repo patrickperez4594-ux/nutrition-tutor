@@ -18,7 +18,7 @@ function narrowBlock() {
   return css.slice(start);
 }
 
-test('the Low-Energy toggle never wraps its own text, and the header wraps rows instead', () => {
+test('the Detour Mode toggle never wraps its own text, and the header wraps rows instead', () => {
   expect(rule('.kefi-app .low-energy-toggle')).toMatch(/white-space:\s*nowrap/);
   expect(rule('.kefi-header')).toMatch(/flex-wrap:\s*wrap/);
 });

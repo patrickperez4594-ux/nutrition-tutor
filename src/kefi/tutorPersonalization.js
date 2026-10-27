@@ -62,7 +62,7 @@ export function toTutorPersonalization(value) {
     learning.overwhelm && `When overwhelmed: ${t(`overwhelm.${learning.overwhelm}`).toLowerCase()}.`,
     locale.measurement && `Use ${locale.measurement} units.`,
     locale.energyUnit && `Express energy in ${locale.energyUnit}.`,
-    lowEnergy && 'Low-Energy Mode is on: keep choices and follow-up questions minimal, without reducing safety, accuracy, or constraint handling.'
+    lowEnergy && 'Detour Mode is on (they may be having a difficult day): keep choices and follow-up questions minimal, without reducing safety, accuracy, or constraint handling.'
   ]);
 
   return { ...emptyPersonalization(), goal, learningStyle, foodContext, otherContext };

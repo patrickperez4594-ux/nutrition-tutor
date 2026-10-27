@@ -81,6 +81,9 @@
 - [x] `App.test.js` passes flags explicitly, so `npm run test:ci` passes with the shell flag on or off.
 - [x] Focus moves to the heading on Ask, Saved Progress, and Back to Welcome.
 
+### Task 13: Rename Low-Energy Mode to Detour Mode
+- [x] User-facing name is **Detour Mode** with the supportive description; behavior and internal identifiers (`lowEnergy`) are unchanged. References to Low-Energy Mode above describe the same feature.
+
 ## Out of scope
 
 Orchestrator/intent routing and expanded tutor controls (Plan 03), Calorie Lab and energy estimation UI (Plan 04), real scanning (Plan 05), pantry/grocery/restaurant engines (Plans 06–08), courses (Plan 09), Coach View and progress (Plan 10), accounts/sync (Plan 11), notifications (Plan 12), additional locales and full a11y hardening (Plan 13), final mascot artwork.

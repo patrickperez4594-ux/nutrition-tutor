@@ -50,7 +50,7 @@ const SECTION_DOMAINS = {
 };
 
 // Copies only the fields a section edits onto the latest profile, so a save never reverts
-// changes made elsewhere (for example Low-Energy Mode toggled from the header) while it was open.
+// changes made elsewhere (for example Detour Mode toggled from the header) while it was open.
 export function applySection(section, latest, draft) {
   if (section === 'teaching') {
     return { ...latest, learning: { ...latest.learning, teachingStyle: draft.learning.teachingStyle, overwhelm: draft.learning.overwhelm } };

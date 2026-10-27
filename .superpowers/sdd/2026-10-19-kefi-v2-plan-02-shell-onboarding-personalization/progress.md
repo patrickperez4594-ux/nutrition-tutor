@@ -56,6 +56,12 @@ Measured in headless Firefox 134 (WebDriver BiDi, throwaway profile, classic 12p
 - After: 0 problems across all 216 screens. Header height 58–61px, except 103px (two single-line rows) at 320px with Larger text. Themes, text size, and preferences unchanged.
 - Regression: `src/__tests__/kefiLayout.test.js` guards the CSS rules (jsdom cannot measure layout). `npm run test:ci` (flag off and on): 33 suites / 164 tests passing; both builds compile.
 
+## Detour Mode rename (2026-10-27)
+
+- Low-Energy Mode is now called **Detour Mode** in the UI (feedback from a reviewer helping evaluate Kefi). Its accessible description is "Having a difficult day? Kefi can make things simpler. Fewer decisions, shorter explanations, and manageable steps at your own pace." The tutor note says "Detour Mode is on" so the model never echoes the old name.
+- Internal identifiers are unchanged (`presentation.lowEnergy`, `data-low-energy`, `.low-energy-toggle`, `header.lowEnergy*` keys), so remembered profiles keep their setting.
+- Layout re-audit (216 screens, 320/375/390px × three text sizes): 0 problems; the header is now one row everywhere (58–61px, previously 103px at 320px Larger).
+
 ## Still required
 
 - Manual visual review of the shell in a browser (light/dark, phone width, keyboard-only, screen reader). Restriction saving and refresh were confirmed in Firefox on 2026-10-27; the rest is still open.

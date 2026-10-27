@@ -4,10 +4,11 @@ const en = {
   'app.assistantName': 'Kefi',
   'app.thinking': 'Kefi is thinking…',
 
-  'header.lowEnergy': 'Low-Energy Mode',
+  // Detour Mode is the user-facing name of the low-energy presentation mode (internal key: lowEnergy).
+  'header.lowEnergy': 'Detour Mode',
   'header.lowEnergyOn': 'On',
   'header.lowEnergyOff': 'Off',
-  'header.lowEnergyHint': 'Fewer choices and shorter answers. Safety and accuracy stay the same.',
+  'header.lowEnergyHint': 'Having a difficult day? Kefi can make things simpler. Fewer decisions, shorter explanations, and manageable steps at your own pace.',
 
   'nav.label': 'Main',
   'nav.home': 'Home',
