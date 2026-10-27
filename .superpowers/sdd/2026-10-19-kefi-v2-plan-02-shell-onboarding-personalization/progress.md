@@ -47,6 +47,15 @@
 - `npm run test:ci` with `REACT_APP_KEFI_FLAG_SHELL=false`, `=true`, and the local `.env`: 32 suites / 159 tests passing each time.
 - `npm run build` with the flag off and on: both compile. No keys in the bundle; `git diff --check` clean.
 
+## Mobile layout fixes (2026-10-27)
+
+Measured in headless Firefox 134 (WebDriver BiDi, throwaway profile, classic 12px scrollbar) at 320, 375, and 390px wide × 480px tall, with Default, Large, and Larger text: Home, Ask, Scan, Learn, Me, all 12 Me sections, Saved Progress, Low-Energy + dark Home, Welcome, and all 4 onboarding steps (216 screens). Every control was scrolled into view and checked to land between the sticky header and the bottom nav.
+
+- Before: the Low-Energy toggle wrapped to 3 lines (320px Large/Larger, 375px Larger; header up to 120px), and every 320px screen scrolled sideways because `body { min-width: 320px }` (index.css) exceeds the 308px left beside a scrollbar. All controls were already reachable and nothing sat behind the nav.
+- Fix (CSS only, `src/kefi/kefi.css`): the toggle never wraps its text; the header wraps the toggle to its own row only when it cannot fit (320px + Larger); a compact header, mark, and gutters under 520px; `body:has(.kefi-app) { min-width: 0 }`; main bottom padding follows the nav height in rem; long user-entered words wrap; the reused chat header wraps its actions under the title.
+- After: 0 problems across all 216 screens. Header height 58–61px, except 103px (two single-line rows) at 320px with Larger text. Themes, text size, and preferences unchanged.
+- Regression: `src/__tests__/kefiLayout.test.js` guards the CSS rules (jsdom cannot measure layout). `npm run test:ci` (flag off and on): 33 suites / 164 tests passing; both builds compile.
+
 ## Still required
 
 - Manual visual review of the shell in a browser (light/dark, phone width, keyboard-only, screen reader). Restriction saving and refresh were confirmed in Firefox on 2026-10-27; the rest is still open.

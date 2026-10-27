@@ -29,6 +29,9 @@
   --danger: var(--k-danger);
   --shadow: var(--k-shadow);
 
+  /* Bottom nav item height: 60px target + label line + padding, so it scales with text size. */
+  --k-nav-height: calc(60px + .5rem);
+
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -101,7 +104,7 @@ html[data-kefi-text-size="larger"] { font-size: 125%; }
 /* Header */
 .kefi-header {
   position: sticky; top: 0; z-index: 10;
-  display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem .75rem;
   padding: .6rem 1rem;
   background: var(--k-surface);
   border-bottom: 1px solid var(--k-border);
@@ -113,6 +116,7 @@ html[data-kefi-text-size="larger"] { font-size: 125%; }
   min-height: 44px; padding: .45rem .8rem;
   background: var(--k-surface-soft); color: var(--k-ink);
   border: 1px solid var(--k-border); border-radius: 999px; font-size: .88rem;
+  white-space: nowrap;
 }
 .kefi-app .low-energy-toggle[aria-pressed="true"] { background: var(--k-primary-soft); border-color: var(--k-primary); }
 .low-energy-state { font-weight: 850; color: var(--k-primary-strong); }
@@ -128,7 +132,10 @@ html[data-kefi-text-size="larger"] { font-size: 125%; }
   flex: 1;
   width: min(100%, 760px);
   margin: 0 auto;
-  padding: 1.25rem 1rem calc(96px + env(safe-area-inset-bottom, 0px));
+  min-width: 0;
+  /* Long user-entered words (a restriction, a custom goal) wrap instead of widening the page. */
+  overflow-wrap: anywhere;
+  padding: 1.25rem 1rem calc(var(--k-nav-height) + 1.5rem + env(safe-area-inset-bottom, 0px));
 }
 .onboarding-main { padding-bottom: 2rem; }
 .kefi-screen h1 { font-size: clamp(1.6rem, 5vw, 2.3rem); margin-bottom: .75rem; }
@@ -246,14 +253,30 @@ html[data-kefi-text-size="larger"] { font-size: 125%; }
   display: grid; grid-template-columns: repeat(5, 1fr); max-width: 760px;
 }
 .bottom-nav-item {
-  width: 100%; min-height: 60px; padding: .35rem .25rem;
+  width: 100%; min-width: 0; min-height: 60px; padding: .35rem .25rem;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .15rem;
   background: transparent; color: var(--k-muted); font-size: .78rem; font-weight: 700; border-radius: 12px;
 }
 .bottom-nav-item[aria-current="page"] { color: var(--k-primary-strong); background: var(--k-primary-soft); font-weight: 850; }
 
+/* The global body min-width (index.css) would force sideways scrolling once a scrollbar narrows a
+   320px viewport; the shell is built to fit any width. */
+body:has(.kefi-app) { min-width: 0; }
+
 @media (max-width: 520px) {
   .home-grid { grid-template-columns: 1fr; }
   .restriction-add { grid-template-columns: 1fr; }
-  .low-energy-toggle { font-size: .8rem; }
+  .kefi-header { padding: .4rem .75rem; }
+  .kefi-brand { gap: .35rem; }
+  .kefi-brand .kefi-mark { width: 28px; height: 28px; }
+  .kefi-wordmark { font-size: 1.15rem; }
+  .kefi-app .low-energy-toggle { gap: .35rem; padding: .3rem .7rem; font-size: .8rem; }
+  .kefi-main { padding-left: .75rem; padding-right: .75rem; }
+  .bottom-nav ul { padding: .25rem; }
+  .bottom-nav-item { font-size: .72rem; }
+  /* Reused V1 chat: keep its header and actions on as few rows as possible. */
+  .kefi-app .chat-header { flex-wrap: wrap; padding: .75rem .9rem; gap: .5rem; }
+  .kefi-app .chat-header h1 { font-size: 1.15rem; }
+  .kefi-app .header-actions { margin-left: auto; }
+  .kefi-app .chat-bottom { padding: .75rem .9rem .9rem; }
 }
