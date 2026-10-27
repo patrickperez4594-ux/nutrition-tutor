@@ -61,6 +61,7 @@ Measured in headless Firefox 134 (WebDriver BiDi, throwaway profile, classic 12p
 - Low-Energy Mode is now called **Detour Mode** in the UI (feedback from a reviewer helping evaluate Kefi). Its accessible description is "Having a difficult day? Kefi can make things simpler. Fewer decisions, shorter explanations, and manageable steps at your own pace." The tutor note says "Detour Mode is on" so the model never echoes the old name.
 - Internal identifiers are unchanged (`presentation.lowEnergy`, `data-low-energy`, `.low-energy-toggle`, `header.lowEnergy*` keys), so remembered profiles keep their setting.
 - Layout re-audit (216 screens, 320/375/390px × three text sizes): 0 problems; the header is now one row everywhere (58–61px, previously 103px at 320px Larger).
+- While Detour Mode is on, Home shows the description under its heading (same catalog string as the toggle's accessible description). Re-audit: 0 problems; at 320px Ask Kefi and Plans Changed stay above the fold. Tests: 33 suites / 165 passing (flag off and on); both builds compile.
 
 ## Still required
 

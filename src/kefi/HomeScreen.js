@@ -43,6 +43,8 @@ export default function HomeScreen({ profile, lowEnergy, onAsk, onTab, onMeSecti
 
       {lowEnergy ? (
         <>
+          {/* Same catalog text as the header toggle's description, shown so sighted users see it too. */}
+          <p className="muted detour-note">{t('header.lowEnergyHint')}</p>
           <p className="eyebrow">{t('home.oneStep')}</p>
           <ActionCard action={first} primary showHint={false} />
           {plansChanged}

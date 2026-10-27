@@ -40,7 +40,7 @@ The adapter sends goals, teaching preferences, food context, cooking, budget, ca
 
 ### Detour Mode is presentation only
 
-Detour Mode is the user-facing name of the spec's Low-Energy / Low-Decision Mode (§9). Its description reads: "Having a difficult day? Kefi can make things simpler. Fewer decisions, shorter explanations, and manageable steps at your own pace." Code keeps the internal identifiers (`presentation.lowEnergy`, `data-low-energy`, `.low-energy-toggle`, `header.lowEnergy*` string keys) so stored profiles and styles are unaffected.
+Detour Mode is the user-facing name of the spec's Low-Energy / Low-Decision Mode (§9). Its description reads: "Having a difficult day? Kefi can make things simpler. Fewer decisions, shorter explanations, and manageable steps at your own pace." Code keeps the internal identifiers (`presentation.lowEnergy`, `data-low-energy`, `.low-energy-toggle`, `header.lowEnergy*` string keys) so stored profiles and styles are unaffected. While it is on, Home shows the same description under its heading, so it is visible as well as announced.
 
 It reduces Home to one next step plus Plans Changed (the rest one tap away), hides secondary copy, disables animation, and asks the tutor for short answers. It does not change safety, facts, or constraints.
 

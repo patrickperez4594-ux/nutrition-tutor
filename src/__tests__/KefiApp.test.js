@@ -199,8 +199,12 @@ describe('Detour Mode (internally lowEnergy)', () => {
   test('reduces Home to one next step plus Plans Changed, with the rest one tap away', async () => {
     render(<KefiApp />);
     const toggle = screen.getByRole('button', { name: 'Detour Mode' });
+    const note = /^Having a difficult day\? Kefi can make things simpler\./;
+    const home = () => within(screen.getByRole('main'));
+    expect(home().queryByText(note)).not.toBeInTheDocument();
     await userEvent.click(toggle);
     expect(toggle).toHaveAttribute('aria-pressed', 'true');
+    expect(home().getByText(note)).toBeVisible();
     expect(screen.getByText('One good next step')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /^Ask Kefi/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Plans Changed/ })).toBeInTheDocument();
