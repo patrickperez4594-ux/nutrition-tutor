@@ -547,3 +547,31 @@ describe('keyboard focus follows navigation', () => {
     expect(screen.getByRole('heading', { level: 1, name: /Hi, I’m Kefi/ })).toHaveFocus();
   });
 });
+
+describe('tutor errors in Ask', () => {
+  const UNAVAILABLE = 'The tutor is temporarily unavailable. Your conversation is still here. Please retry.';
+
+  test('a failed request keeps the conversation, offers Retry, and retries the same message without saving', async () => {
+    storeProfile({});
+    const fetchMock = jest.fn()
+      .mockResolvedValueOnce({ ok: false, status: 502, json: async () => ({ error: UNAVAILABLE }) })
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ content: 'Protein helps repair muscle.' }) });
+    global.fetch = fetchMock;
+    render(<KefiApp />);
+    await userEvent.click(tab('Ask'));
+    await userEvent.type(screen.getByLabelText('Ask a nutrition question'), 'Help me understand protein{enter}');
+
+    const alert = await screen.findByRole('alert');
+    expect(alert).toHaveTextContent(UNAVAILABLE);
+    expect(screen.getByText('Help me understand protein')).toBeInTheDocument();
+    const retry = within(alert).getByRole('button', { name: 'Retry' });
+
+    await userEvent.click(retry);
+    expect(await screen.findByText('Protein helps repair muscle.')).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    const retried = lastChatBody(fetchMock).messages;
+    expect(retried.filter((m) => m.content === 'Help me understand protein')).toHaveLength(1);
+    expect(window.localStorage.getItem(SAVED_KEY)).toBeNull();
+  });
+});

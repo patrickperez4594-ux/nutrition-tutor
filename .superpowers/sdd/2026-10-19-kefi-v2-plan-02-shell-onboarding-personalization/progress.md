@@ -63,6 +63,12 @@ Measured in headless Firefox 134 (WebDriver BiDi, throwaway profile, classic 12p
 - Layout re-audit (216 screens, 320/375/390px × three text sizes): 0 problems; the header is now one row everywhere (58–61px, previously 103px at 320px Larger).
 - While Detour Mode is on, Home shows the description under its heading (same catalog string as the toggle's accessible description). Re-audit: 0 problems; at 320px Ask Kefi and Plans Changed stay above the fold. Tests: 33 suites / 165 passing (flag off and on); both builds compile.
 
+## Retry layout and tutor error (2026-10-27)
+
+- Retry split mid-word into 5 lines (140px tall at 320px) because the mobile fix's `overflow-wrap: anywhere` on `.kefi-main` let the error text squeeze the button. Buttons in the shell now use `overflow-wrap: break-word`, and the error-banner button is `flex: none; white-space: nowrap`. Verified in headless Firefox with an in-page simulated 502 (no network request): 1 line at 320/375/390px × three text sizes; the 216-screen layout audit still has 0 problems.
+- Tutor error: the API server log shows `Tutor request failed: status=429 code=credit_balance_exhausted type=insufficient_quota`. The AI provider received the request and refused it for exhausted credit, so it is an account/billing state, not a Kefi code or local-configuration fault. Kefi handled it as designed: a generic 502 to the browser, the conversation kept, nothing saved, and no key material logged. No live request was retried.
+- Tests: `npm run test:ci` (flag off and on) 33 suites / 167 passing; both builds compile.
+
 ## Still required
 
 - Manual visual review of the shell in a browser (light/dark, phone width, keyboard-only, screen reader). Restriction saving and refresh were confirmed in Firefox on 2026-10-27; the rest is still open.

@@ -42,6 +42,14 @@ test('narrow viewports never scroll sideways', () => {
   expect(rule('.kefi-app .chat-header', narrowBlock())).toMatch(/flex-wrap:\s*wrap/);
 });
 
+test('button labels are never squeezed mid-word, and Retry stays on one line', () => {
+  // overflow-wrap: anywhere on .kefi-main once let the error banner split "Retry" across five lines.
+  expect(rule('.kefi-main button')).toMatch(/overflow-wrap:\s*break-word/);
+  const retry = rule('.kefi-app .error-banner button');
+  expect(retry).toMatch(/white-space:\s*nowrap/);
+  expect(retry).toMatch(/flex:\s*none/);
+});
+
 test('enlarged text still scales the whole shell', () => {
   expect(css).toMatch(/html\[data-kefi-text-size="large"\]\s*\{\s*font-size:\s*112\.5%/);
   expect(css).toMatch(/html\[data-kefi-text-size="larger"\]\s*\{\s*font-size:\s*125%/);
