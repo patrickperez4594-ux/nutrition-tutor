@@ -34,9 +34,22 @@
 - `npm run build` (flag off) and `REACT_APP_KEFI_FLAG_SHELL=true npm run build`: both compile.
 - Built bundle contains no API keys or `OPENAI_API_KEY` references; branch diff has no secrets; `git diff --check` clean.
 
+## Final review fixes (2026-10-27)
+
+- Safety: a restriction typed but not added was silently dropped on Me Save and onboarding Next. Now a complete entry is added (Me announces it), and an entry without a type blocks with an alert, `aria-invalid`, and focus on Type. The pending entry is owned by Onboarding/SectionEditor, so it also survives onboarding Back. onboarding Skip still discards that step's answers, as designed.
+- The disabled Add button has a visible hint linked by `aria-describedby`.
+- `App.test.js` rendered `<App />`, which read the developer's `.env`; it now passes `flags` explicitly.
+- Ask (`ChatScreen`), Saved Progress (`SavedConversationList`), and the onboarding Welcome headings are focus targets; the focus outline rule covers the whole shell.
+- Docs: the plan's Task 11 now names `kefi-v2-shell.md`, which is where the shell is documented.
+
+## Verification (2026-10-27)
+
+- `npm run test:ci` with `REACT_APP_KEFI_FLAG_SHELL=false`, `=true`, and the local `.env`: 32 suites / 159 tests passing each time.
+- `npm run build` with the flag off and on: both compile. No keys in the bundle; `git diff --check` clean.
+
 ## Still required
 
-- Manual visual review of the shell in a browser (light/dark, phone width, keyboard-only, screen reader).
+- Manual visual review of the shell in a browser (light/dark, phone width, keyboard-only, screen reader). Restriction saving and refresh were confirmed in Firefox on 2026-10-27; the rest is still open.
 - Manual V1 smoke test with a real API key (carried over from Plan 01; not run to avoid paid API calls).
 - Final mascot artwork.
 - User approval before push / PR.

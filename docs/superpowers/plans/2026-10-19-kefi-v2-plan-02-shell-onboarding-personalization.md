@@ -72,8 +72,14 @@
 
 ### Task 11: Scenarios, documentation, verification gate
 - [x] `tests/scenarios/plan02-personalization.scenario.test.js` (privacy + constraints end to end).
-- [x] Update `docs/architecture/kefi-v2-foundation.md` and README for the shell flag.
+- [x] Document the shell in `docs/architecture/kefi-v2-shell.md` (instead of extending `kefi-v2-foundation.md`) and README for the shell flag.
 - [x] `npm run test:ci`, `npm run build`, `git diff --check`, secret scan.
+
+### Task 12: Final review fixes
+- [x] A typed-but-unadded restriction is added on Save/Next when complete, or blocks with an accessible explanation when its type is missing; it survives onboarding Back.
+- [x] The disabled Add button explains what it needs.
+- [x] `App.test.js` passes flags explicitly, so `npm run test:ci` passes with the shell flag on or off.
+- [x] Focus moves to the heading on Ask, Saved Progress, and Back to Welcome.
 
 ## Out of scope
 

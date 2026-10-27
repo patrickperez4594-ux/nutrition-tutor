@@ -28,6 +28,12 @@ The profile lives in React state. `saveProfile` writes to `localStorage` (`kefi.
 
 Restrictions keep their label even when their kind is malformed. An unrecognized kind is treated as an allergy, the most protective reading. Allergies are sent to the tutor as explicitly labelled hard constraints in every presentation mode, including Low-Energy Mode. `avoid` (religious, ethical, or personal) is also treated as hard. `intolerance` is context-sensitive and `dislike` is a preference.
 
+A restriction that has been typed but not added is never lost when its form is left. On Me **Save** and onboarding **Next**, a complete entry (food and type) is added automatically and announced; an entry with no type blocks the action with an alert and moves focus to **Type**. The type has no default, and the disabled **Add** button carries a visible explanation of what it needs.
+
+### Focus follows navigation
+
+Every tab, Me section, onboarding step (including Back to Welcome), the Ask chat, and Saved Progress move keyboard focus to that screen's `h1` (`tabIndex=-1`), with a visible outline only for keyboard focus.
+
 ### Minimum necessary context
 
 The adapter sends goals, teaching preferences, food context, cooking, budget, calorie-display preference, and unit preferences. Display settings (theme, text size, motion), privacy choices, and onboarding state never leave the browser.
