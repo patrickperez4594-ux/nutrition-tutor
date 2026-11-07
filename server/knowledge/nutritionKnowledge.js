@@ -1,8 +1,10 @@
 const { makeProvenance } = require('../domain/provenance');
 
-const VERSION = '1.0.0';
+const { sources: expandedSources, definitions: expandedDefinitions } = require('./expandedFoods');
+const VERSION = '1.1.0';
 const REVIEWED_AT = '2026-11-07';
 const SOURCES = {
+  ...expandedSources,
   vitaminK: { title: 'NIH ODS: Vitamin K, Consumer', url: 'https://ods.od.nih.gov/factsheets/VitaminK-Consumer/' },
   choline: { title: 'NIH ODS: Choline, Consumer', url: 'https://ods.od.nih.gov/pdf/factsheets/Choline-Consumer.pdf' },
   omega3: { title: 'NIH ODS: Omega-3 Fatty Acids, Consumer', url: 'https://ods.od.nih.gov/factsheets/Omega3FattyAcids-Consumer/' },
@@ -32,14 +34,14 @@ function deepFreeze(value) {
   if (value && typeof value === 'object') { Object.values(value).forEach(deepFreeze); Object.freeze(value); }
   return value;
 }
-const entries = deepFreeze(definitions.map(([id, aliases, nutrients, explanation, sourceIds, servingIdeas, allergens]) => ({
-  id, version: VERSION, status: 'verified', aliases, nutrients,
+const entries = deepFreeze([...definitions, ...expandedDefinitions].map(([id, aliases, nutrients, explanation, sourceIds, servingIdeas, allergens, version = '1.0.0']) => ({
+  id, version, status: 'verified', aliases, nutrients,
   claims: [{ text: explanation, sourceIds }], servingIdeas, allergens,
-  allergenNotes: 'Check ingredients and cross-contact. An empty allergen list is not an allergy-safety guarantee. Lactose intolerance and milk allergy are different.',
+  allergenNotes: version === '1.0.0' ? 'Check ingredients and cross-contact. An empty allergen list is not an allergy-safety guarantee. Lactose intolerance and milk allergy are different.' : 'Ingredients, coatings, sauces, fortification and preparation vary. Individual allergies can occur to foods outside major-allergen lists; oats may have gluten cross-contact and chickpea dishes may contain sesame. Check ingredients and cross-contact. An empty allergen list is not an allergy-safety guarantee. Lactose intolerance and milk allergy are different.',
   evidenceStrength: 'established',
   scope: 'Food composition and normal nutrient roles; not a clinical outcome or personalized treatment claim.',
   sources: [...new Set([...sourceIds, 'allergens'])].map((key) => ({ id: key, ...SOURCES[key], reviewedAt: REVIEWED_AT, verificationStatus: 'verified' })),
-  provenance: makeProvenance({ sourceType: 'curated-nutrition-reference', provider: 'Kefi editorial curation', sourceId: `kefi-food:${id}@${VERSION}`, retrievedAt: REVIEWED_AT, verificationStatus: 'verified' })
+  provenance: makeProvenance({ sourceType: 'curated-nutrition-reference', provider: 'Kefi editorial curation', sourceId: `kefi-food:${id}@${version}`, retrievedAt: REVIEWED_AT, verificationStatus: 'verified' })
 })));
 
 function validEntry(entry) {
@@ -58,7 +60,10 @@ function validEntry(entry) {
 function matchFoods(text) {
   if (typeof text !== 'string') return [];
   const normalized = ` ${text.toLowerCase().replace(/[^a-z]+/g, ' ')} `;
-  return entries.filter((entry) => validEntry(entry) && entry.aliases.some((alias) => normalized.includes(` ${alias} `)));
+  // Remove plant/human milk phrases only for dairy matching; never infer fortification.
+  const dairyText = normalized.replace(/\b(?:soy|soya|almond|oat|coconut|rice|cashew|hemp|pea|breast|human) milk\b/g, ' ');
+  return entries.filter((entry) => validEntry(entry) && entry.aliases.some((alias) =>
+    (entry.id === 'milk' ? dairyText : normalized).includes(` ${alias} `)));
 }
 function knowledgeEvidence(text, personalization = {}) {
   return matchFoods(text).map((entry) => ({
