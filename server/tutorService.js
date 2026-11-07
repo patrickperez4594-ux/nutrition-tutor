@@ -1,5 +1,5 @@
 const { buildInstructions } = require('./prompt');
-const { knowledgeEvidence } = require('./knowledge/nutritionKnowledge');
+const { createEducationPlan, educationInstructions } = require('./orchestration/nutritionEducation');
 const { createLanguageModelProvider } = require('./providers/languageModel');
 const { tutorPersonalization, evidenceContext, buildTutoringGuidelines } = require('./orchestration/tutoringFoundation');
 
@@ -23,12 +23,12 @@ function createTutorService({ client, model, provider = createLanguageModelProvi
 
       const safePersonalization = tutorPersonalization(personalization);
       const latestUser = [...input].reverse().find((message) => message.role === 'user');
-      const foodEvidence = knowledgeEvidence(latestUser?.content, safePersonalization);
+      const lesson = createEducationPlan({ question: latestUser?.content, personalization: safePersonalization, action, evidence: referenceEvidence });
       const response = await provider.generate({
         model,
         store: false,
         instructions: buildInstructions({ personalization: safePersonalization, action }) +
-          buildTutoringGuidelines([...referenceEvidence, ...foodEvidence]),
+          buildTutoringGuidelines(lesson.evidence) + educationInstructions(lesson),
         input
       });
 
