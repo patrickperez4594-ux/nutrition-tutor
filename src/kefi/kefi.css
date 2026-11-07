@@ -2,20 +2,98 @@
    Shared V1 tokens (--green, --ink, ...) are remapped here so reused V1 components adopt the Kefi palette. */
 
 .kefi-app {
-  --k-bg: #fbf7f1;
+  color-scheme: light;
+  /* Approved green direction: forest surfaces, emerald structure, lime emphasis.
+     All component colors below consume semantic tokens. */
+  --k-bg: #f2f8f1;
   --k-surface: #ffffff;
-  --k-surface-soft: #f3ece2;
-  --k-ink: #2a2420;
-  --k-muted: #6b5f55;
-  --k-primary: #b4532a;
-  --k-primary-strong: #8f3f1d;
-  --k-primary-soft: #f6e1d4;
-  --k-on-primary: #ffffff;
-  --k-accent: #2f6f62;
-  --k-spark: #d99a2b;
-  --k-border: #e6dccf;
+  --k-surface-soft: #e6f2e5;
+  --k-ink: #103c29;
+  --k-muted: #42634e;
+  --k-primary: #a3ff3f;
+  --k-primary-hover: #c4ff80;
+  --k-primary-strong: #075b39;
+  --k-primary-soft: #dff4cf;
+  --k-on-primary: #073b25;
+  --k-accent: #126041;
+  --k-highlight: #a3ff3f;
+  --k-on-highlight: #073b25;
+  --k-spark: #75b52b;
+  --k-border: #638871;
+  --k-focus: #075b39;
   --k-danger: #a23636;
-  --k-shadow: 0 10px 30px rgba(74, 52, 35, 0.08);
+  --k-on-danger: #ffffff;
+  --k-user-bg: #075b39;
+  --k-on-user: #f4fff7;
+  --k-placeholder: var(--k-muted);
+  --k-shadow: 0 10px 30px rgba(4, 55, 30, 0.08);
+  /* Luminous Emerald: layered gradients, glass-like cards, and lime glow. Card gradient stops are
+     opaque so text contrast never depends on the decorations behind them. */
+  --k-card-top: #ffffff;
+  --k-card-bottom: #ecf7ea;
+  --k-card-border: #4fb878;
+  --k-card-border-hover: #2e9a5a;
+  --k-icon: #0b6b41;
+  --k-glow-color: rgba(117, 181, 43, 0.35);
+  --k-sheen: rgba(255, 255, 255, 0.75);
+  --k-heading-glow: none;
+  --k-radius-card: 22px;
+  --k-radius-panel: 24px;
+  --k-header-background: linear-gradient(115deg, rgba(255, 255, 255, 0.92), rgba(230, 242, 229, 0.9));
+  --k-nav-background: rgba(255, 255, 255, 0.94);
+  --k-page-background:
+    radial-gradient(ellipse at 10% -10%, #d6f5bf 0, transparent 50%),
+    radial-gradient(ellipse at 110% 35%, #c6eed6 0, transparent 45%),
+    linear-gradient(180deg, #f4faf2 0%, #e4f3e2 100%);
+  /* Decorations (KefiBackdrop) */
+  --k-deco-opacity: 1;
+  --k-deco-wave-a: rgba(117, 181, 43, 0.16);
+  --k-deco-wave-b: rgba(49, 165, 109, 0.14);
+  --k-deco-wave-c: rgba(117, 181, 43, 0.18);
+  --k-deco-line: rgba(117, 181, 43, 0.55);
+  --k-deco-bubble: rgba(49, 165, 109, 0.18);
+  --k-deco-bubble-highlight: rgba(255, 255, 255, 0.8);
+  --k-deco-leaf: #8fd14f;
+  --k-deco-leaf-vein: rgba(255, 255, 255, 0.7);
+  --k-deco-sparkle: #75b52b;
+  /* Dark values live here once; explicit and system dark reference this palette. */
+  --k-dark-bg: #032d1c;
+  --k-dark-surface: #073b25;
+  --k-dark-surface-soft: #104b32;
+  --k-dark-ink: #f4fff7;
+  --k-dark-muted: #b9d8c2;
+  --k-dark-primary-strong: #b9ff75;
+  --k-dark-primary-soft: #165533;
+  --k-dark-accent: #8bdfad;
+  --k-dark-border: #31a56d;
+  --k-dark-focus: #a3ff3f;
+  --k-dark-danger: #ffb4b4;
+  --k-dark-on-danger: #461515;
+  --k-dark-spark: #a3ff3f;
+  --k-dark-shadow: 0 10px 30px rgba(0, 20, 10, 0.3);
+  --k-dark-card-top: #0e5a38;
+  --k-dark-card-bottom: #073b25;
+  --k-dark-card-border: #6fdc5a;
+  --k-dark-card-border-hover: #a3ff3f;
+  --k-dark-icon: #a3ff3f;
+  --k-dark-glow-color: rgba(163, 255, 63, 0.45);
+  --k-dark-sheen: rgba(200, 255, 170, 0.18);
+  --k-dark-heading-glow: 0 0 22px rgba(163, 255, 63, 0.25);
+  --k-dark-header-background: linear-gradient(115deg, rgba(7, 59, 37, 0.94), rgba(16, 75, 50, 0.9));
+  --k-dark-nav-background: rgba(5, 46, 29, 0.95);
+  --k-dark-page-background:
+    radial-gradient(ellipse at 0% -5%, rgba(163, 255, 63, 0.28) 0, transparent 45%),
+    radial-gradient(ellipse at 100% 100%, rgba(111, 220, 90, 0.22) 0, transparent 50%),
+    linear-gradient(180deg, #0a4a2c 0%, #032d1c 100%);
+  --k-dark-deco-wave-a: rgba(163, 255, 63, 0.16);
+  --k-dark-deco-wave-b: rgba(111, 220, 90, 0.18);
+  --k-dark-deco-wave-c: rgba(163, 255, 63, 0.24);
+  --k-dark-deco-line: rgba(196, 255, 128, 0.6);
+  --k-dark-deco-bubble: rgba(111, 220, 90, 0.28);
+  --k-dark-deco-bubble-highlight: rgba(220, 255, 190, 0.55);
+  --k-dark-deco-leaf: #7fd63a;
+  --k-dark-deco-leaf-vein: rgba(7, 59, 37, 0.55);
+  --k-dark-deco-sparkle: #c4ff80;
 
   --bg: var(--k-bg);
   --surface: var(--k-surface);
@@ -32,46 +110,130 @@
   /* Bottom nav item height: 60px target + label line + padding, so it scales with text size. */
   --k-nav-height: calc(60px + .5rem);
 
+  --k-card-background: linear-gradient(160deg, var(--k-card-top) 0%, var(--k-card-bottom) 100%);
+  --k-primary-gradient: linear-gradient(135deg, var(--k-primary-hover) 0%, var(--k-primary) 100%);
+  /* Living Emerald: shared idle halos and slow, independent decorative rhythms. */
+  --k-motion-float: 18s;
+  --k-motion-wave: 32s;
+  --k-motion-gradient: 40s;
+  --k-glow: 0 0 0 1px var(--k-glow-color), 0 0 24px var(--k-glow-color), 0 6px 36px var(--k-glow-color);
+  --k-card-shadow: inset 0 1px 0 var(--k-sheen), 0 0 20px var(--k-glow-color), var(--k-shadow);
+  --k-control-glow: 0 0 10px var(--k-glow-color);
+  --k-interaction-glow: inset 0 0 0 1px var(--k-spark), var(--k-glow);
+  --k-pressed-shadow: inset 0 0 0 2px var(--k-primary-strong), inset 0 2px 8px var(--k-glow-color);
+  --k-card-hover-shadow: inset 0 1px 0 var(--k-sheen), 0 0 16px var(--k-glow-color), var(--k-shadow);
+
+  position: relative;
+  isolation: isolate;
+
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--k-bg);
+  background: var(--k-page-background);
   color: var(--k-ink);
 }
 
 .kefi-app[data-theme="dark"] {
-  --k-bg: #1c1916;
-  --k-surface: #26221e;
-  --k-surface-soft: #302a25;
-  --k-ink: #f3ece4;
-  --k-muted: #c2b5a8;
-  --k-primary: #e8956a;
-  --k-primary-strong: #f2b08c;
-  --k-primary-soft: #4a3326;
-  --k-on-primary: #1c1916;
-  --k-accent: #7cc4b3;
-  --k-border: #3d362f;
-  --k-danger: #f19a9a;
-  --k-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+  --k-bg: var(--k-dark-bg);
+  --k-surface: var(--k-dark-surface);
+  --k-surface-soft: var(--k-dark-surface-soft);
+  --k-ink: var(--k-dark-ink);
+  --k-muted: var(--k-dark-muted);
+  --k-primary-strong: var(--k-dark-primary-strong);
+  --k-primary-soft: var(--k-dark-primary-soft);
+  --k-accent: var(--k-dark-accent);
+  --k-border: var(--k-dark-border);
+  --k-focus: var(--k-dark-focus);
+  --k-danger: var(--k-dark-danger);
+  --k-on-danger: var(--k-dark-on-danger);
+  --k-spark: var(--k-dark-spark);
+  --k-shadow: var(--k-dark-shadow);
+  --k-card-top: var(--k-dark-card-top);
+  --k-card-bottom: var(--k-dark-card-bottom);
+  --k-card-border: var(--k-dark-card-border);
+  --k-card-border-hover: var(--k-dark-card-border-hover);
+  --k-icon: var(--k-dark-icon);
+  --k-glow-color: var(--k-dark-glow-color);
+  --k-sheen: var(--k-dark-sheen);
+  --k-heading-glow: var(--k-dark-heading-glow);
+  --k-header-background: var(--k-dark-header-background);
+  --k-nav-background: var(--k-dark-nav-background);
+  --k-page-background: var(--k-dark-page-background);
+  --k-deco-wave-a: var(--k-dark-deco-wave-a);
+  --k-deco-wave-b: var(--k-dark-deco-wave-b);
+  --k-deco-wave-c: var(--k-dark-deco-wave-c);
+  --k-deco-line: var(--k-dark-deco-line);
+  --k-deco-bubble: var(--k-dark-deco-bubble);
+  --k-deco-bubble-highlight: var(--k-dark-deco-bubble-highlight);
+  --k-deco-leaf: var(--k-dark-deco-leaf);
+  --k-deco-leaf-vein: var(--k-dark-deco-leaf-vein);
+  --k-deco-sparkle: var(--k-dark-deco-sparkle);
 }
 
 @media (prefers-color-scheme: dark) {
   .kefi-app[data-theme="system"] {
-    --k-bg: #1c1916;
-    --k-surface: #26221e;
-    --k-surface-soft: #302a25;
-    --k-ink: #f3ece4;
-    --k-muted: #c2b5a8;
-    --k-primary: #e8956a;
-    --k-primary-strong: #f2b08c;
-    --k-primary-soft: #4a3326;
-    --k-on-primary: #1c1916;
-    --k-accent: #7cc4b3;
-    --k-border: #3d362f;
-    --k-danger: #f19a9a;
-    --k-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    color-scheme: dark;
+    --k-bg: var(--k-dark-bg);
+    --k-surface: var(--k-dark-surface);
+    --k-surface-soft: var(--k-dark-surface-soft);
+    --k-ink: var(--k-dark-ink);
+    --k-muted: var(--k-dark-muted);
+    --k-primary-strong: var(--k-dark-primary-strong);
+    --k-primary-soft: var(--k-dark-primary-soft);
+    --k-accent: var(--k-dark-accent);
+    --k-border: var(--k-dark-border);
+    --k-focus: var(--k-dark-focus);
+    --k-danger: var(--k-dark-danger);
+    --k-on-danger: var(--k-dark-on-danger);
+    --k-spark: var(--k-dark-spark);
+    --k-shadow: var(--k-dark-shadow);
+    --k-card-top: var(--k-dark-card-top);
+    --k-card-bottom: var(--k-dark-card-bottom);
+    --k-card-border: var(--k-dark-card-border);
+    --k-card-border-hover: var(--k-dark-card-border-hover);
+    --k-icon: var(--k-dark-icon);
+    --k-glow-color: var(--k-dark-glow-color);
+    --k-sheen: var(--k-dark-sheen);
+    --k-heading-glow: var(--k-dark-heading-glow);
+    --k-header-background: var(--k-dark-header-background);
+    --k-nav-background: var(--k-dark-nav-background);
+    --k-page-background: var(--k-dark-page-background);
+    --k-deco-wave-a: var(--k-dark-deco-wave-a);
+    --k-deco-wave-b: var(--k-dark-deco-wave-b);
+    --k-deco-wave-c: var(--k-dark-deco-wave-c);
+    --k-deco-line: var(--k-dark-deco-line);
+    --k-deco-bubble: var(--k-dark-deco-bubble);
+    --k-deco-bubble-highlight: var(--k-dark-deco-bubble-highlight);
+    --k-deco-leaf: var(--k-dark-deco-leaf);
+    --k-deco-leaf-vein: var(--k-dark-deco-leaf-vein);
+    --k-deco-sparkle: var(--k-dark-deco-sparkle);
   }
 }
+
+/* Detour softens emphasis without changing facts, constraints, or controls. */
+.kefi-app[data-low-energy="true"] {
+  --k-primary: #c5dfb9;
+  --k-primary-hover: #d7e9cf;
+  --k-highlight: #c5dfb9;
+  --k-spark: var(--k-accent);
+  --k-header-background: var(--k-surface);
+  --k-nav-background: var(--k-surface);
+  --k-shadow: none;
+  /* Calmer Luminous Emerald: flat surfaces, no glow, quiet decorations. */
+  --k-page-background: var(--k-bg);
+  --k-card-top: var(--k-surface);
+  --k-card-bottom: var(--k-surface);
+  --k-card-border: var(--k-border);
+  --k-card-border-hover: var(--k-border);
+  --k-icon: var(--k-accent);
+  --k-glow-color: transparent;
+  --k-heading-glow: none;
+  --k-deco-opacity: 0.35;
+}
+.kefi-app :focus-visible { outline: 3px solid var(--k-focus); outline-offset: 3px; }
+.kefi-app input, .kefi-app select { accent-color: var(--k-primary-strong); }
+.kefi-app input::placeholder, .kefi-app textarea::placeholder { color: var(--k-placeholder); opacity: 1; }
 
 /* Text size scales the root so rem-based V1 components grow too. */
 html[data-kefi-text-size="large"] { font-size: 112.5%; }
@@ -80,10 +242,12 @@ html[data-kefi-text-size="larger"] { font-size: 125%; }
 .kefi-app[data-motion="reduce"] *,
 .kefi-app[data-low-energy="true"] * { transition: none !important; animation: none !important; }
 .kefi-app[data-motion="reduce"] button:hover:not(:disabled),
-.kefi-app[data-low-energy="true"] button:hover:not(:disabled) { transform: none; }
+.kefi-app[data-low-energy="true"] button:hover:not(:disabled),
+.kefi-app[data-motion="reduce"] button:focus-visible,
+.kefi-app[data-low-energy="true"] button:focus-visible { transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .kefi-app * { transition: none !important; animation: none !important; }
-  .kefi-app button:hover:not(:disabled) { transform: none; }
+  .kefi-app button:hover:not(:disabled), .kefi-app button:focus-visible { transform: none; }
 }
 
 .visually-hidden {
@@ -101,27 +265,108 @@ html[data-kefi-text-size="larger"] { font-size: 125%; }
 .kefi-mark-eye { fill: var(--k-ink); }
 .kefi-mark-motion { stroke: var(--k-spark); }
 
+/* Luminous decorations: fixed behind all content, never interactive. */
+.kefi-backdrop {
+  position: fixed; inset: 0; z-index: -1;
+  overflow: hidden; pointer-events: none;
+  opacity: var(--k-deco-opacity);
+  background-image:
+    radial-gradient(ellipse at 12% 18%, var(--k-deco-wave-a), transparent 55%),
+    radial-gradient(ellipse at 88% 82%, var(--k-deco-wave-b), transparent 60%);
+  background-size: 160% 160%;
+  animation: kefi-gradient-drift var(--k-motion-gradient) ease-in-out infinite;
+}
+.kefi-waves {
+  position: absolute; left: -5%; width: 110%; display: block;
+  animation: kefi-wave-drift var(--k-motion-wave) ease-in-out infinite;
+}
+.kefi-waves-bottom { animation-direction: reverse; animation-delay: -13s; }
+.kefi-waves-top { top: 0; height: 150px; }
+.kefi-waves-bottom { bottom: 0; height: min(30vh, 260px); }
+.kefi-wave-a { fill: var(--k-deco-wave-a); }
+.kefi-wave-b { fill: var(--k-deco-wave-b); }
+.kefi-wave-c { fill: var(--k-deco-wave-c); }
+.kefi-wave-line { stroke: var(--k-deco-line); stroke-width: 3; vector-effect: non-scaling-stroke; }
+.kefi-bubble {
+  position: absolute; left: var(--x); top: var(--y);
+  width: var(--size); height: var(--size); border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--k-deco-bubble-highlight) 0, var(--k-deco-bubble) 45%, transparent 72%);
+  box-shadow: 0 0 16px var(--k-deco-bubble), inset 0 0 8px var(--k-deco-bubble);
+  opacity: var(--bubble-opacity, 1);
+  animation: kefi-float var(--float-duration, var(--k-motion-float)) ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+.kefi-bubble:nth-of-type(2n) { --float-duration: 23s; --float-x: -12px; --float-rise: -34px; }
+.kefi-bubble:nth-of-type(3n) { --float-duration: 27s; --float-x: 16px; --float-rise: -42px; }
+.kefi-bubble.soft { filter: blur(2px); opacity: var(--bubble-opacity, .7); }
+.kefi-sparkle {
+  position: absolute; left: var(--x); top: var(--y);
+  width: var(--size); height: var(--size); fill: var(--k-deco-sparkle);
+  animation: kefi-twinkle 11s ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+.kefi-leaf { position: absolute; width: 72px; height: 72px; transform-origin: 15% 85%; animation: kefi-sway 16s ease-in-out infinite; }
+.kefi-leaf-body { fill: var(--k-deco-leaf); }
+.kefi-leaf-vein { stroke: var(--k-deco-leaf-vein); }
+.kefi-leaf-top { top: 64px; right: 4%; width: 84px; height: 84px; transform: rotate(-8deg); }
+.kefi-leaf-left { bottom: 18%; left: -14px; transform: rotate(-60deg); }
+.kefi-leaf-left.small { bottom: 26%; left: 26px; width: 44px; height: 44px; transform: rotate(-20deg); animation-delay: -4s; }
+.kefi-leaf-right { bottom: 22%; right: -12px; transform: rotate(150deg) scaleY(-1); animation-delay: -2s; }
+.kefi-leaf-right.small { bottom: 31%; right: 30px; width: 44px; height: 44px; transform: rotate(110deg) scaleY(-1); animation-delay: -6s; }
+.kefi-app[data-low-energy="true"] .kefi-sparkle,
+.kefi-app[data-low-energy="true"] .kefi-leaf.small,
+.kefi-app[data-low-energy="true"] .kefi-bubble.soft { display: none; }
+
+@keyframes kefi-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: var(--float-x, 8px) var(--float-rise, -26px); }
+}
+@keyframes kefi-twinkle {
+  0%, 65%, 100% { opacity: .12; scale: .8; }
+  80% { opacity: .85; scale: 1; }
+}
+@keyframes kefi-sway {
+  0%, 100% { rotate: 0deg; }
+  50% { rotate: 4deg; }
+}
+
+@keyframes kefi-wave-drift {
+  0%, 100% { translate: -2% 0; }
+  50% { translate: 2% 8px; }
+}
+@keyframes kefi-gradient-drift {
+  0%, 100% { background-position: 0% 20%; }
+  50% { background-position: 100% 80%; }
+}
+
 /* Header */
 .kefi-header {
   position: sticky; top: 0; z-index: 10;
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem .75rem;
   padding: .6rem 1rem;
-  background: var(--k-surface);
-  border-bottom: 1px solid var(--k-border);
+  background: var(--k-header-background);
+  border-bottom: 1px solid var(--k-card-border);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 .kefi-brand { display: flex; align-items: center; gap: .5rem; }
-.kefi-wordmark { font-weight: 850; font-size: 1.35rem; letter-spacing: -.03em; }
+.kefi-brand .kefi-mark { width: 46px; height: 46px; filter: drop-shadow(0 0 6px var(--k-glow-color)); }
+.kefi-wordmark { font-weight: 850; font-size: 1.7rem; line-height: 1; letter-spacing: -.03em; text-shadow: var(--k-heading-glow); }
+.kefi-wordmark-sparkles { fill: var(--k-spark); margin-left: -.2rem; flex: none; }
+.kefi-app[data-low-energy="true"] .kefi-wordmark-sparkles { display: none; }
 .kefi-app .low-energy-toggle {
   display: inline-flex; align-items: center; gap: .5rem;
   min-height: 44px; padding: .45rem .8rem;
   background: var(--k-surface-soft); color: var(--k-ink);
-  border: 1px solid var(--k-border); border-radius: 999px; font-size: .88rem;
+  border: 2px solid var(--k-card-border); border-radius: 999px; font-size: .88rem;
   white-space: nowrap;
+  box-shadow: var(--k-glow);
 }
 .kefi-app .low-energy-toggle[aria-pressed="true"] { background: var(--k-primary-soft); border-color: var(--k-primary); }
 .low-energy-state { font-weight: 850; color: var(--k-primary-strong); }
 
 .kefi-alert {
+  position: relative;
   margin: .75rem auto 0; width: min(calc(100% - 2rem), 728px);
   padding: .75rem 1rem; border-radius: 12px;
   background: var(--k-surface); color: var(--k-danger); border: 1px solid var(--k-danger);
@@ -140,11 +385,11 @@ html[data-kefi-text-size="larger"] { font-size: 125%; }
 .onboarding-main { padding-bottom: 2rem; }
 /* Button labels must not be squeezed mid-word by the overflow-wrap above; they still wrap at spaces. */
 .kefi-main button { overflow-wrap: break-word; }
-.kefi-app .error-banner { gap: .75rem; }
-.kefi-app .error-banner button { flex: none; white-space: nowrap; }
-.kefi-screen h1 { font-size: clamp(1.6rem, 5vw, 2.3rem); margin-bottom: .75rem; }
+.kefi-app .error-banner { gap: .75rem; background: var(--k-surface-soft); color: var(--k-danger); border-color: var(--k-danger); }
+.kefi-app .error-banner button { background: var(--k-danger); color: var(--k-on-danger); flex: none; white-space: nowrap; }
+.kefi-screen h1 { font-size: clamp(1.6rem, 5vw, 2.3rem); margin-bottom: .75rem; text-shadow: var(--k-heading-glow); }
 .kefi-app h1:focus { outline: none; }
-.kefi-app h1:focus-visible { outline: 3px solid var(--k-primary); outline-offset: 4px; }
+.kefi-app h1:focus-visible { outline: 3px solid var(--k-focus); outline-offset: 4px; }
 .kefi-app .eyebrow { color: var(--k-primary-strong); }
 .kefi-app .muted, .kefi-app .welcome-copy, .kefi-app .trust-line { color: var(--k-muted); }
 .section-heading { font-size: 1.15rem; margin: 1.75rem 0 .5rem; }
@@ -152,36 +397,54 @@ html[data-kefi-text-size="larger"] { font-size: 125%; }
 .small-print { font-size: .85rem; }
 
 /* Buttons inside the shell */
-.kefi-app .primary-button { background: var(--k-primary); color: var(--k-on-primary); box-shadow: none; }
-.kefi-app .primary-button:hover:not(:disabled) { background: var(--k-primary-strong); }
+.kefi-app .primary-button { background: var(--k-primary-gradient); color: var(--k-on-primary); box-shadow: var(--k-glow); }
+.kefi-app .primary-button:hover:not(:disabled), .kefi-app .send-button:hover:not(:disabled) { background: var(--k-primary-hover); }
+.kefi-app .primary-button:disabled, .kefi-app .send-button:disabled { box-shadow: none; }
 .kefi-app .secondary-button { background: var(--k-surface); color: var(--k-ink); border: 1px solid var(--k-border); }
-.kefi-app .text-button, .kefi-app .back-link { color: var(--k-primary-strong); }
+.kefi-app .text-button, .kefi-app .back-link, .kefi-app .save-button { color: var(--k-primary-strong); }
 .kefi-app .danger-button { background: var(--k-surface); color: var(--k-danger); border: 1px solid var(--k-danger); }
+
+/* Reused chat Send must use the theme's on-primary text color, as other primary actions do. */
+.kefi-app .send-button { background: var(--k-primary); color: var(--k-on-primary); }
+.kefi-app .send-button:not(:disabled) { background-image: var(--k-primary-gradient); box-shadow: var(--k-glow); }
 
 /* Home */
 .home-focus { margin-top: -.25rem; }
 .home-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin: 1rem 0; }
 .home-card, .plans-changed {
-  display: flex; flex-direction: column; align-items: flex-start; gap: .3rem;
-  width: 100%; min-height: 88px; padding: 1rem;
+  display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .85rem;
+  width: 100%; min-height: 88px; padding: 1rem 1.1rem;
   text-align: left; color: var(--k-ink);
-  background: var(--k-surface); border: 1px solid var(--k-border); border-radius: 20px;
-  box-shadow: var(--k-shadow);
+  background: var(--k-card-background); border: 1.5px solid var(--k-card-border); border-radius: var(--k-radius-card);
+  box-shadow: var(--k-card-shadow);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
-.home-card.primary { background: var(--k-primary); color: var(--k-on-primary); border-color: var(--k-primary); }
-.home-card.primary .home-card-hint { color: inherit; opacity: .9; }
+.home-card:hover:not(:disabled), .plans-changed:hover:not(:disabled),
+.home-card:focus-visible, .plans-changed:focus-visible {
+  transform: translateY(-2px); border-color: var(--k-card-border-hover); box-shadow: var(--k-card-hover-shadow);
+}
+.home-card-text { display: flex; flex-direction: column; gap: .3rem; min-width: 0; }
+.home-card-icon { flex: none; color: var(--k-icon); }
+.home-card.primary {
+  background: var(--k-primary-gradient); color: var(--k-on-primary); border-color: var(--k-primary);
+  box-shadow: inset 0 1px 0 var(--k-sheen), var(--k-glow);
+}
+.home-card.primary:hover:not(:disabled), .home-card.primary:focus-visible { border-color: var(--k-primary); box-shadow: inset 0 1px 0 var(--k-sheen), var(--k-glow), var(--k-shadow); }
+.home-card.primary .home-card-hint, .home-card.primary .home-card-icon { color: inherit; }
 .home-card-label { font-size: 1.05rem; font-weight: 800; }
 .home-card-hint { font-size: .88rem; font-weight: 500; color: var(--k-muted); }
-.plans-changed { margin-top: .25rem; border: 2px solid var(--k-spark); background: var(--k-surface-soft); }
+.plans-changed { margin-top: .25rem; border: 2px solid var(--k-spark); }
 .kefi-app[data-low-energy="true"] .home-card { min-height: 64px; margin-bottom: .75rem; }
 .show-more { margin-top: .75rem; }
 
 /* Learn */
 .topic-list { display: grid; gap: .6rem; margin: .75rem 0; }
 .topic-button {
-  text-align: left; background: var(--k-surface); color: var(--k-ink);
-  border: 1px solid var(--k-border); min-height: 52px;
+  text-align: left; background: var(--k-card-background); color: var(--k-ink);
+  border: 1.5px solid var(--k-card-border); border-radius: 16px; min-height: 52px;
+  box-shadow: var(--k-card-shadow);
 }
+.topic-button:hover:not(:disabled) { border-color: var(--k-card-border-hover); box-shadow: var(--k-card-hover-shadow); }
 
 /* Forms */
 .kefi-fieldset { border: 0; padding: 0; margin: 1.25rem 0; }
@@ -198,13 +461,13 @@ html[data-kefi-text-size="larger"] { font-size: 125%; }
 .kefi-app .choice-pill span { background: var(--k-surface); border-color: var(--k-border); color: var(--k-ink); }
 .kefi-app .choice-pill input:checked + span { border-color: var(--k-primary); background: var(--k-primary-soft); color: var(--k-ink); }
 .kefi-app .choice-pill input:checked + span::before { content: "✓ "; font-weight: 900; margin-right: .3rem; }
-.kefi-app .choice-pill input:focus-visible + span { outline: 3px solid var(--k-primary); outline-offset: 2px; }
+.kefi-app .choice-pill input:focus-visible + span { outline: 3px solid var(--k-focus); outline-offset: 2px; }
 .kefi-app textarea { background: var(--k-surface); color: var(--k-ink); border-color: var(--k-border); }
 
 .restriction-list { list-style: none; padding: 0; margin: .5rem 0; display: grid; gap: .5rem; }
 .restriction-item {
   display: flex; justify-content: space-between; align-items: center; gap: .5rem;
-  padding: .55rem .75rem; border-radius: 12px; border: 1px solid var(--k-border); background: var(--k-surface);
+  padding: .55rem .75rem; border-radius: 14px; border: 1px solid var(--k-card-border); background: var(--k-surface);
 }
 .restriction-item > span { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
 .restriction-kind { font-size: .8rem; font-weight: 700; padding: .15rem .5rem; border-radius: 999px; background: var(--k-surface-soft); }
@@ -228,28 +491,110 @@ html[data-kefi-text-size="larger"] { font-size: 125%; }
 .me-section-button {
   width: 100%; display: flex; justify-content: space-between; align-items: center;
   min-height: 56px; text-align: left;
-  background: var(--k-surface); color: var(--k-ink); border: 1px solid var(--k-border); border-radius: 14px;
+  background: var(--k-card-background); color: var(--k-ink);
+  border: 1.5px solid var(--k-card-border); border-radius: 18px;
+  box-shadow: var(--k-card-shadow);
 }
+.me-section-button:hover:not(:disabled) { border-color: var(--k-card-border-hover); box-shadow: var(--k-card-hover-shadow); }
 
 /* Reused V1 chat and saved list inside the shell */
 .kefi-app .chat-panel, .kefi-app .panel {
-  width: 100%; max-width: none; background: var(--k-surface); border-color: var(--k-border); box-shadow: var(--k-shadow);
+  width: 100%; max-width: none; background: var(--k-surface); border-color: var(--k-card-border);
+  border-radius: var(--k-radius-panel); box-shadow: var(--k-card-shadow);
 }
 .kefi-app .chat-panel { min-height: calc(100vh - 190px); }
 .kefi-app .chat-header, .kefi-app .chat-bottom { background: var(--k-surface); }
 .kefi-app .assistant .message-bubble { background: var(--k-surface-soft); border-color: var(--k-border); }
-.kefi-app .user .message-bubble { background: var(--k-primary-strong); color: var(--k-bg); }
+.kefi-app .user .message-bubble { background: var(--k-user-bg); color: var(--k-on-user); }
 .kefi-app .tutor-orb { background: none; box-shadow: none; width: auto; height: auto; }
 .kefi-app .starter-grid button, .kefi-app .teaching-controls button { background: var(--k-surface); color: var(--k-ink); border-color: var(--k-border); }
+/* Full-card native buttons retain their click area and keyboard outline in every state.
+   Use shadow/color feedback rather than movement so touch and reduced-motion stay calm. */
+.kefi-app .starter-grid button {
+  min-height: 48px;
+  background: var(--k-card-background);
+  border-color: var(--k-card-border);
+  box-shadow: var(--k-card-shadow);
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+.kefi-app .starter-grid button:hover:not(:disabled),
+.kefi-app .starter-grid button:focus-visible {
+  border-color: var(--k-spark);
+  box-shadow: inset 0 0 0 1px var(--k-spark), var(--k-glow), var(--k-shadow);
+}
+.kefi-app .starter-grid button:active:not(:disabled) {
+  border-color: var(--k-primary-strong);
+  box-shadow: inset 0 0 0 2px var(--k-primary-strong), inset 0 2px 8px var(--k-glow-color);
+}
 .kefi-app .saved-card { background: var(--k-surface); }
+.kefi-app .failed-label { color: var(--k-on-user); }
+.kefi-app .message-label { opacity: 1; }
 .kefi-app .icon-button { background: var(--k-surface-soft); color: var(--k-ink); }
 .kefi-app .modal { background: var(--k-surface); color: var(--k-ink); }
 .kefi-app[data-low-energy="true"] .privacy-notice span + span { display: none; }
 
+/* Shared Living Emerald surfaces and interactions across existing tabs and dialogs.
+   Opaque surfaces preserve palette contrast. Only major surfaces get the full halo. */
+.kefi-app :is(.saved-card, .modal) {
+  background: var(--k-card-background);
+  border-color: var(--k-card-border);
+  box-shadow: var(--k-card-shadow);
+}
+.kefi-app .modal { max-height: calc(100dvh - 2rem); overflow-y: auto; }
+.kefi-app .modal-close { background: var(--k-surface-soft); color: var(--k-ink); }
+.kefi-app :is(.secondary-button, .icon-button, .modal-close),
+.kefi-app .teaching-controls button {
+  box-shadow: var(--k-control-glow);
+}
+.kefi-app :is(.policy-card, .choice-pill span) {
+  background: var(--k-surface);
+  border-color: var(--k-border);
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+.kefi-app .policy-card:has(input:checked),
+.kefi-app .choice-pill input:checked + span {
+  background: var(--k-primary-soft);
+  border-color: var(--k-primary-strong);
+  box-shadow: var(--k-control-glow);
+}
+/* No new animation loops: feedback is brief, local, and available without hover. */
+.kefi-app button:not(:disabled):not(.danger-button):is(:hover, :focus-visible) {
+  box-shadow: var(--k-interaction-glow), var(--k-shadow);
+}
+.kefi-app button:not(:disabled):not(.danger-button):active {
+  box-shadow: var(--k-pressed-shadow);
+  transform: none;
+}
+.kefi-app .danger-button:is(:hover, :focus-visible) { box-shadow: inset 0 0 0 1px var(--k-danger); }
+.kefi-app .danger-button:active { box-shadow: inset 0 0 0 2px var(--k-danger); transform: none; }
+.kefi-app .policy-card:is(:hover, :focus-within),
+.kefi-app .choice-pill:hover span,
+.kefi-app .choice-pill input:focus-visible + span {
+  box-shadow: var(--k-interaction-glow);
+}
+.kefi-app .policy-card:has(input:focus-visible) { outline: 3px solid var(--k-focus); outline-offset: 3px; }
+.kefi-app .policy-card:active,
+.kefi-app .choice-pill:active span { box-shadow: var(--k-pressed-shadow); }
+.kefi-app :is(.kefi-field input, .kefi-field select, textarea):focus-visible {
+  box-shadow: var(--k-control-glow);
+}
+.kefi-app .toggle-row:has(input:focus-visible) { outline: 3px solid var(--k-focus); outline-offset: 3px; border-radius: 8px; }
+.kefi-app :is(.save-button, .text-button, .back-link),
+.kefi-app .teaching-controls button { min-height: 44px; }
+.kefi-app .bottom-nav-item[aria-current="page"] {
+  /* The inset edge reinforces the selected fill without relying on glow alone. */
+  box-shadow: inset 0 0 0 2px var(--k-primary-strong), var(--k-glow);
+}
+.kefi-app .bottom-nav-item[aria-current="page"]:is(:hover, :focus-visible) {
+  box-shadow: inset 0 0 0 2px var(--k-primary-strong), var(--k-interaction-glow);
+}
+
 /* Bottom navigation */
 .bottom-nav {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
-  background: var(--k-surface); border-top: 1px solid var(--k-border);
+  background: var(--k-nav-background); border-top: 1px solid var(--k-card-border);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 .bottom-nav ul {
@@ -259,9 +604,15 @@ html[data-kefi-text-size="larger"] { font-size: 125%; }
 .bottom-nav-item {
   width: 100%; min-width: 0; min-height: 60px; padding: .35rem .25rem;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .15rem;
-  background: transparent; color: var(--k-muted); font-size: .78rem; font-weight: 700; border-radius: 12px;
+  background: transparent; color: var(--k-muted); font-size: .78rem; font-weight: 700; border-radius: 16px;
+  transition: color .18s ease, background-color .18s ease;
 }
-.bottom-nav-item[aria-current="page"] { color: var(--k-primary-strong); background: var(--k-primary-soft); font-weight: 850; }
+.bottom-nav-item:hover:not([aria-current="page"]) { color: var(--k-ink); background: var(--k-surface-soft); }
+.bottom-nav-item[aria-current="page"] {
+  color: var(--k-on-highlight); font-weight: 850;
+  background: var(--k-highlight) linear-gradient(135deg, var(--k-primary-hover), var(--k-highlight));
+  box-shadow: var(--k-glow);
+}
 
 /* The global body min-width (index.css) would force sideways scrolling once a scrollbar narrows a
    320px viewport; the shell is built to fit any width. */
@@ -272,8 +623,9 @@ body:has(.kefi-app) { min-width: 0; }
   .restriction-add { grid-template-columns: 1fr; }
   .kefi-header { padding: .4rem .75rem; }
   .kefi-brand { gap: .35rem; }
-  .kefi-brand .kefi-mark { width: 28px; height: 28px; }
-  .kefi-wordmark { font-size: 1.15rem; }
+  .kefi-brand .kefi-mark { width: 36px; height: 36px; }
+  .kefi-wordmark { font-size: 1.45rem; }
+  .kefi-wordmark-sparkles { width: 20px; height: 20px; }
   .kefi-app .low-energy-toggle { gap: .35rem; padding: .3rem .7rem; font-size: .8rem; }
   .kefi-main { padding-left: .75rem; padding-right: .75rem; }
   .bottom-nav ul { padding: .25rem; }
@@ -283,4 +635,19 @@ body:has(.kefi-app) { min-width: 0; }
   .kefi-app .chat-header h1 { font-size: 1.15rem; }
   .kefi-app .header-actions { margin-left: auto; }
   .kefi-app .chat-bottom { padding: .75rem .9rem .9rem; }
+  /* Fewer, smaller decorations on phones so they stay at the edges, behind content. */
+  .kefi-leaf.small, .kefi-bubble.soft, .kefi-sparkle { display: none; }
+  .kefi-leaf { width: 52px; height: 52px; }
+  .kefi-waves-top { height: 96px; }
+  .kefi-waves-bottom { height: 150px; }
+  .home-card, .plans-changed { gap: .7rem; }
+}
+
+/* The top leaf would sit behind the heading until the page is wider than the content column. */
+@media (max-width: 1023px) {
+  .kefi-leaf-top { display: none; }
+}
+@media (min-width: 1024px) {
+  .kefi-leaf { width: 96px; height: 96px; }
+  .kefi-leaf-top { right: 10%; width: 110px; height: 110px; }
 }

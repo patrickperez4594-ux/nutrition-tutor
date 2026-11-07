@@ -75,3 +75,127 @@ Measured in headless Firefox 134 (WebDriver BiDi, throwaway profile, classic 12p
 - Manual V1 smoke test with a real API key (carried over from Plan 01; not run to avoid paid API calls).
 - Final mascot artwork.
 - User approval before push / PR.
+
+## Final acceptance verification (2026-11-04)
+
+Verified locally on `feat/kefi-v2-plan02-shell`, starting from published commit
+`0103416d5ddc1ee3ed433e22afef3249378e35ac`. No commits, pushes, merges,
+rebases, resets, PRs, or Plan 03 implementation were performed.
+
+### Scoped acceptance fixes
+
+- Both shared saved-progress dialogs declared `aria-modal` without modal keyboard
+  behavior. Eight regression tests reproduced the missing initial focus, forward/
+  backward Tab containment, Escape dismissal, and restoration of opener focus.
+  `useDialogFocus` now supplies those behaviors to SaveProgressDialog and
+  ReviewPrompt. Saved-data policy and provider behavior are unchanged.
+- The reused Send button inherited white text on the dark palette's light-orange
+  primary background (2.35:1 contrast). It now uses `--k-on-primary`, matching
+  other primary actions. Two CSS-palette tests check normal-text contrast of at
+  least 4.5:1 in light/dark themes. These are static palette checks, not rendered
+  browser or full accessibility audits.
+
+### Fresh automated results
+
+- Full `npm run test:ci -- --runInBand --cache=false --silent` with shell flag
+  false and true: **35 suites / 177 tests pass in each configuration**.
+- `npm run build` with shell flag false and true: **both compile successfully**.
+- `git diff --check`: clean before this documentation update; rechecked after it.
+- Credential-pattern scan of tracked/new files and built JavaScript: no detected
+  OpenAI/GitHub token or private-key patterns. Built JavaScript contains no
+  `OPENAI_API_KEY` reference. This is a limited pattern scan, not a security audit.
+- Initial unsilenced tests still emit the existing React `act` warnings. Final
+  test runs used `--silent` to avoid repeating those warnings; no dependency
+  upgrades were made.
+- Tests use provider doubles; `OPENAI_API_KEY` was explicitly empty for commands.
+  No backend was launched and no paid-provider requests were made.
+
+### Browser and manual acceptance still pending
+
+Browser runtime initialization succeeded, but selection reported “No browser is
+available” and discovery returned an empty list. No browser screenshots, fresh
+viewport measurements, real keyboard walkthrough, or screen-reader checks were
+possible in this session. The historical 216-screen Firefox audit above remains
+historical evidence only. CSS and DOM tests do not close visual acceptance.
+
+Manual checklist (use the shell flag on; do not send chat requests):
+
+- At 320/375/390px width and 480px height, check Home, Ask, Scan, Learn, Me,
+  every Me section, Saved Progress, all onboarding steps, and both dialogs with
+  Default/Large/Larger text. Check horizontal overflow, sticky-header/bottom-nav
+  overlap, dialog scrolling, and reachability of every control.
+- Repeat representative screens in light/dark/system themes, including chat
+  messages, retry/error states, dialogs, disabled controls, and focus indicators.
+- With keyboard only, check Tab/Shift+Tab, radio arrow keys, Enter/Space activation,
+  heading focus after navigation, restriction validation focus, and dialog
+  containment/Escape/restoration. Simulate chat responses/errors rather than
+  invoking a provider.
+- With a screen reader, check navigation labels/current page, form labels and
+  groups, restriction alerts, save announcements, Detour state/description,
+  dialog names, and announcements on navigation.
+- Live-provider V1 smoke test: **pending; intentionally not attempted** under the
+  no-paid-calls requirement. Last recorded provider result was exhausted credit;
+  current credits were not queried. A successful live smoke test still needs
+  separate authorization and available credit.
+- Final artwork remains a follow-up; the Plan 02 scope permits the provisional
+  mascot and this is not an implementation blocker.
+
+**Acceptance decision:** automated gates pass after scoped fixes; Plan 02 is not
+ready for unconditional final approval until manual visual/accessibility checks
+and the carried-over live-provider gate are completed or explicitly deferred by
+its owner. Local acceptance changes remain uncommitted and unpushed for review.
+
+## Approved green direction implementation (2026-11-04)
+
+- Reference: the user attached the approved green dashboard screenshot after the
+  ChatGPT share URL could not be retrieved. Matched the forest/emerald/lime color
+  direction while preserving the existing shell layout, navigation, and features.
+- Reusable semantic tokens cover light/dark/system-dark, actions, focus, errors,
+  message text, and surfaces. Detour softens accents and removes decorative
+  shadows/header gradient; existing reduced-motion behavior remains.
+- Existing uncommitted dialog-accessibility and Send-contrast fixes preserved.
+- Added 139 parameterized palette checks; full suites now pass **36 suites /
+  316 tests** with the shell flag false and true. Final production builds pass
+  with both flag values. `git diff --check` is clean.
+- Existing mobile CSS guards pass. No fresh visual/keyboard browser verification:
+  browser discovery still returns no available browsers. Full accessibility and
+  exact rendered fidelity remain pending, rather than inferred from palette tests.
+- Development preview responds HTTP 200 at `http://localhost:3000`; port 3001 is
+  not listening. No paid-provider requests were made.
+- Awaiting the user's Firefox review in light/dark themes, at mobile widths, with
+  enlarged text and Detour Mode. Implementation is not finalized or approved yet.
+- Changes remain uncommitted/unpushed on `feat/kefi-v2-plan02-shell`; no merge,
+  reset, deletion, PR, or Plan 03 work was performed.
+
+## Kefi V2 Luminous Emerald implementation (2026-11-04)
+
+- Reference: `~/Downloads/Neon Green Kefi Wellness Dashboard.png` (approved mockup). Layout,
+  navigation, features, and copy are unchanged; this is a visual layer on the green palette above.
+- New tokens in `kefi.css`: opaque card gradient stops (`--k-card-top/bottom`), luminous card
+  borders, icon color, lime glow, sheen, heading glow, page/header/nav backgrounds, and decoration
+  colors. Dark values live once as `--k-dark-*` and feed explicit and system dark.
+- `KefiBackdrop` (CSS + inline SVG, no dependencies) draws waves, bubbles, leaves, and sparkles in a
+  fixed, `aria-hidden`, `pointer-events: none` layer at `z-index: -1` inside an isolated `.kefi-app`.
+  Phones hide sparkles and small leaves; the top leaf only shows at 1024px and wider.
+- Home cards gained decorative line icons (`HomeIcons`), larger radius, glass sheen, luminous
+  borders, and hover/focus lift. Primary buttons, Send, the Ask Kefi card, and the current nav item
+  use the lime gradient and glow.
+- Detour Mode: flat surfaces, plain borders, no glow, no header gradient, decorations at 35%
+  opacity with sparkles/small leaves hidden, and no animation. Reduced motion (setting or OS) stops
+  all decoration animation and hover/focus lift.
+- Tests: 393 pass in 37 suites with the shell flag false and true (adds `kefiLuminous.test.js` and
+  card/icon contrast pairs in `kefiTheme.test.js`). Production builds compile both ways.
+  `git diff --check` clean.
+- Real-browser check (headless Chrome via Playwright, API routes blocked): Home at 320/390/768/1440px
+  in light, dark, and Detour. No horizontal scroll, no unnamed buttons, and no control is covered by
+  a decoration (the only covered card centers were under the fixed bottom nav before scrolling).
+  No axe-style automated audit was run (no new dependencies); Firefox review by the user is pending.
+- No commits, pushes, merges, or paid-provider calls.
+
+## Living Emerald approval and backup (2026-11-07)
+
+- User officially approved the complete Living Emerald design across Home, Ask, Scan, Learn, and Me, including animated decorations, eleven bubbles, enlarged branding, and shared interaction styling. This supersedes the earlier pending visual-approval notes.
+- Backup scope includes the recovered dialog keyboard-accessibility fixes, contrast checks, decorative icons/backdrop, shared theme styling, and related tests/docs. No Plan 03 work or live-provider calls.
+- Fresh full tests with the shell enabled and disabled: 34 suites / 385 tests passed in each; 3 suites / 8 tests failed in each solely with local socket `listen EPERM` errors in this sandbox. Affected suites: `server/__tests__/app.test.js`, `tests/scenarios/v1-regression.scenario.test.js`, and `tests/scenarios/plan02-personalization.scenario.test.js`. No assertion failures reported.
+- Production builds passed with both shell flag values; build outputs were directed outside the repository. `git diff --check` passed. Existing React act warnings remain.
+- Reviewed all 16 changed/untracked files; limited credential-pattern scan found no matches. Ignored `.env` and `build/` are excluded from staging. Broader accessibility audits and live-provider verification remain separate follow-ups.

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import './kefi.css';
 import KefiHeader from './KefiHeader';
 import KefiMark from './KefiMark';
+import KefiBackdrop from './KefiBackdrop';
 import BottomNav from './BottomNav';
 import HomeScreen from './HomeScreen';
 import ScanScreen from './ScanScreen';
@@ -99,6 +100,7 @@ export default function KefiApp() {
   if (!profile.onboarding.completed) {
     return (
       <div className="kefi-app" data-text-size={profile.accessibility.textSize} data-theme={profile.accessibility.theme} data-motion={profile.accessibility.motion}>
+        <KefiBackdrop />
         <main className="kefi-main onboarding-main">
           <Onboarding initialProfile={profile} onComplete={commitProfile} />
         </main>
@@ -114,6 +116,7 @@ export default function KefiApp() {
       data-theme={profile.accessibility.theme}
       data-motion={profile.accessibility.motion}
     >
+      <KefiBackdrop />
       <KefiHeader
         lowEnergy={lowEnergy}
         onToggleLowEnergy={() => commitProfile({ ...profile, presentation: { lowEnergy: !lowEnergy } })}

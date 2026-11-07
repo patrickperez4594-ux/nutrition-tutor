@@ -26,7 +26,7 @@ test('the Detour Mode toggle never wraps its own text, and the header wraps rows
 test('the header is compact on narrow screens', () => {
   const narrow = narrowBlock();
   expect(rule('.kefi-header', narrow)).toMatch(/padding:\s*\.4rem/);
-  expect(rule('.kefi-brand .kefi-mark', narrow)).toMatch(/width:\s*28px/);
+  expect(rule('.kefi-brand .kefi-mark', narrow)).toMatch(/width:\s*36px/);
 });
 
 test('content always clears the fixed bottom navigation, which grows with text size', () => {

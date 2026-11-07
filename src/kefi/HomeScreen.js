@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { t } from '../i18n';
+import HomeIcon from './HomeIcons';
 
 // Home actions (spec §5.2). Destinations whose engines arrive in later plans open Ask Kefi with an
 // editable starter, so nothing pretends to be a finished feature.
@@ -17,8 +18,11 @@ export function homeActions({ onAsk, onTab, onMeSection }) {
 function ActionCard({ action, showHint, primary }) {
   return (
     <button type="button" className={`home-card${primary ? ' primary' : ''}`} onClick={action.run}>
-      <span className="home-card-label">{action.label}</span>
-      {showHint && <span className="home-card-hint">{action.hint}</span>}
+      <HomeIcon name={action.id} />
+      <span className="home-card-text">
+        <span className="home-card-label">{action.label}</span>
+        {showHint && <span className="home-card-hint">{action.hint}</span>}
+      </span>
     </button>
   );
 }
@@ -31,8 +35,11 @@ export default function HomeScreen({ profile, lowEnergy, onAsk, onTab, onMeSecti
 
   const plansChanged = (
     <button type="button" className="plans-changed" onClick={() => onAsk(t('starter.plansChanged'))}>
-      <span className="home-card-label">{t('home.plansChanged')}</span>
-      {!lowEnergy && <span className="home-card-hint">{t('home.plansChangedHint')}</span>}
+      <HomeIcon name="plansChanged" />
+      <span className="home-card-text">
+        <span className="home-card-label">{t('home.plansChanged')}</span>
+        {!lowEnergy && <span className="home-card-hint">{t('home.plansChangedHint')}</span>}
+      </span>
     </button>
   );
 

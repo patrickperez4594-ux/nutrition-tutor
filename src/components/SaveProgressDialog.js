@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import useDialogFocus from '../hooks/useDialogFocus';
 export default function SaveProgressDialog({ onSave, onClose }) {
   const [policy, setPolicy] = useState('30d');
+  const dialogRef = useDialogFocus(onClose);
   return (
     <div className="modal-backdrop" role="presentation">
-      <div className="modal" role="dialog" aria-modal="true" aria-labelledby="save-title">
+      <div ref={dialogRef} className="modal" role="dialog" aria-modal="true" aria-labelledby="save-title">
         <button className="modal-close" onClick={onClose} aria-label="Close">×</button>
         <p className="eyebrow">Your choice</p>
         <h2 id="save-title">Save progress on this device?</h2>

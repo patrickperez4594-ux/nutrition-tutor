@@ -60,3 +60,30 @@ Language, region, measurement system, currency, date format, and energy unit are
 
 - The tests emit `act(...)` warnings because `@testing-library/react@13` is paired with React 18.3. This predates Plan 02. Upgrading the testing library is a separate dependency change.
 - Additional locales, a full accessibility audit, and RTL checks belong to Plan 13. Personal energy estimates belong to Plan 04.
+
+## Green theme refresh (2026-11-04; awaiting Firefox review)
+
+The supplied approved green dashboard image grounds the palette. The shell keeps
+its existing layout and interactions. Light mode uses pale green/white surfaces
+with forest text; dark mode uses forest surfaces, emerald borders, and lime
+primary actions/current navigation. Color changes are scoped to the Kefi shell.
+
+`src/kefi/kefi.css` owns semantic `--k-*` tokens for surfaces, text, actions,
+hover colors, focus, errors, user messages, highlights, and shadows. Dark values
+are defined once as `--k-dark-*`; explicit dark and system-dark settings reference
+the same values. Lime uses dark foreground text; red remains reserved for safety
+and error meaning. Shared V1 components receive shell overrides for readable
+Send/Save actions, retry errors, user messages, and placeholders.
+
+Detour Mode swaps lime emphasis for softer sage, removes shadows and the header
+gradient, and retains its existing reduced-motion and density behavior. Text size,
+navigation, privacy, restrictions, and provider behavior are unchanged.
+
+`kefiTheme.test.js` checks static palette text pairs at 4.5:1 and focus colors
+against surfaces at 3:1 across light, dark, system-dark, and Detour states. These
+checks do not establish full WCAG conformance or replace real-browser review.
+The user must review the result in Firefox before this refresh is finalized.
+
+## Living Emerald approved (2026-11-07)
+
+The user approved the complete design across all five tabs, superseding the pending Firefox-review note above. Shared theme tokens supply tiered idle halos, focus/hover accents, pressed feedback, and selected-navigation edges. A single decorative backdrop supplies floating bubbles, waves, leaves, and twinkles; Detour and reduced-motion settings retain their calming behavior. The header mascot/wordmark are enlarged responsively. Shared saved-progress dialogs include keyboard focus containment, Escape dismissal, and opener-focus restoration. No nutrition, routing, or privacy-policy behavior changed.
